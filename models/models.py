@@ -1,0 +1,8 @@
+# -*- coding: utf-8 -*-
+
+from odoo import models, fields, api
+
+class rednuxMyPurchase(models.Model):
+    _inherit = 'purchase.order'
+
+
