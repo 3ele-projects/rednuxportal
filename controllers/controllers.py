@@ -18,32 +18,42 @@ from odoo.addons.web.controllers.main import Binary
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class CustomerPortal(CustomerPortal):
 
 	def _prepare_home_portal_values(self):
-		_logger.warning(self)
+
 		values = super(CustomerPortal, self)._prepare_home_portal_values()
-		values['purchase_count_new'] = request.env['purchase.order'].search_count([('x_studio_status', '=', 'new')])
-		values['purchase_count_confirmed'] = request.env['purchase.order'].search_count([('x_studio_status', '=', 'confirmed')])
-		values['purchase_count_ready_for_delivery'] = request.env['purchase.order'].search_count([('x_studio_status', '=', 'ready for delivery')])
-		values['purchase_count_delivered'] = request.env['purchase.order'].search_count([('x_studio_status', '=', 'delivered')])
-		values['purchase_count_billed'] = request.env['purchase.order'].search_count([('x_studio_status', '=', 'billed')])
-		values['purchase_count_paid'] = request.env['purchase.order'].search_count([('x_studio_status', '=', 'paid')])
-		values['x_lieferanten'] = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])
-		
-	#	_logger.warning(values['x_lieferanten'])
-#		x_studio_field_kontakt
+		values['purchase_count_new'] = request.env['purchase.order'].search_count(
+			[('x_studio_status', '=', 'new')])
+		values['purchase_count_confirmed'] = request.env['purchase.order'].search_count(
+			[('x_studio_status', '=', 'confirmed')])
+		values['purchase_count_ready_for_delivery'] = request.env['purchase.order'].search_count(
+			[('x_studio_status', '=', 'ready for delivery')])
+		values['purchase_count_delivered'] = request.env['purchase.order'].search_count(
+			[('x_studio_status', '=', 'delivered')])
+		values['purchase_count_billed'] = request.env['purchase.order'].search_count(
+			[('x_studio_status', '=', 'billed')])
+		values['purchase_count_paid'] = request.env['purchase.order'].search_count(
+			[('x_studio_status', '=', 'paid')])
+		values['x_lieferanten'] = request.env['x_lieferanten'].search(
+			[('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])
+
+		_logger.warning(values)
+	#		x_studio_field_kontakt
 		return values
-	
+
 	@http.route(['/my/purchase', '/my/purchase/page/<int:page>'], type='http', auth="user", website=True)
 	def portal_my_purchase_orders(self, page=1, date_begin=None, date_end=None, sortby=None, filterby=None, **kw):
 		values = self._prepare_portal_layout_values()
-		partner = request.env.user.partner_id
+
 		PurchaseOrder = request.env['purchase.order']
 		domain = []
-		archive_groups = self._get_archive_groups('purchase.order', domain) if values.get('my_details') else []
+		archive_groups = self._get_archive_groups(
+			'purchase.order', domain) if values.get('my_details') else []
 		if date_begin and date_end:
-			domain += [('create_date', '>', date_begin), ('create_date', '<=', date_end)]
+			domain += [('create_date', '>', date_begin),
+						('create_date', '<=', date_end)]
 
 		searchbar_sortings = {
 			'date': {'label': _('Newest'), 'order': 'create_date desc, id desc'},
@@ -51,7 +61,7 @@ class CustomerPortal(CustomerPortal):
 			'x_studio_marke': {'label': _('Marke'), 'order': 'x_studio_marke asc, id asc'},
 			'amount_total': {'label': _('Total'), 'order': 'amount_total desc, id desc'},
 		}
-        # default sort by value
+	# default sort by value
 		if not sortby:
 			sortby = 'date'
 		order = searchbar_sortings[sortby]['order']
@@ -59,52 +69,53 @@ class CustomerPortal(CustomerPortal):
 		searchbar_filters = {
 			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'delivered', 'confirmed', 'new'])]},
 			'new': {'label': _('new'), 'domain': [('x_studio_status', '=', 'new')]},
-            'paid': {'label': _('paid'), 'domain': [('x_studio_status', '=', ['paid'])]},
-            'billed': {'label': _('billed'), 'domain': [('x_studio_status', '=', 'billed')]},
-            'delivered': {'label': _('delivered'), 'domain': [('x_studio_status', '=', 'delivered')]},
-            'confirmed': {'label': _('confirmed'), 'domain': [('x_studio_status', '=', 'confirmed')]},
+			'paid': {'label': _('paid'), 'domain': [('x_studio_status', '=', ['paid'])]},
+			'billed': {'label': _('billed'), 'domain': [('x_studio_status', '=', 'billed')]},
+			'delivered': {'label': _('delivered'), 'domain': [('x_studio_status', '=', 'delivered')]},
+			'confirmed': {'label': _('confirmed'), 'domain': [('x_studio_status', '=', 'confirmed')]},
 			'ready_for_delivery': {'label': _('ready for delivery'), 'domain': [('x_studio_status', '=', 'ready for delivery')]},
-        }
-        # default filter by value
+		}
+	# default filter by value
 		if not filterby:
 			filterby = 'all'
 		domain += searchbar_filters[filterby]['domain']
 
-        # count for pager
+	# count for pager
 		purchase_count = PurchaseOrder.search_count(domain)
-        # make pager
+	# make pager
 		pager = portal_pager(
-            url="/my/purchase",
-            url_args={'date_begin': date_begin, 'date_end': date_end},
-            total=purchase_count,
-            page=page,
-            step=self._items_per_page
-        )
-        # search the purchase orders to display, according to the pager data
+			url="/my/purchase",
+			url_args={'date_begin': date_begin, 'date_end': date_end},
+			total=purchase_count,
+			page=page,
+			step=self._items_per_page
+		)
+	# search the purchase orders to display, according to the pager data
 		orders = PurchaseOrder.search(
-            domain,
-            order=order,
-            limit=self._items_per_page,
-            offset=pager['offset']
-        )
+			domain,
+			order=order,
+			limit=self._items_per_page,
+			offset=pager['offset']
+		)
 		request.session['my_purchases_history'] = orders.ids[:100]
 
 		values.update({
-            'date': date_begin,
-            'orders': orders,
-            'page_name': 'purchase',
-            'pager': pager,
-            'archive_groups': archive_groups,
-            'searchbar_sortings': searchbar_sortings,
-            'sortby': sortby,
-            'searchbar_filters': OrderedDict(sorted(searchbar_filters.items())),
-            'filterby': filterby,
-            'default_url': '/my/purchase',
-        })
+			'date': date_begin,
+			'orders': orders,
+			'page_name': 'purchase',
+			'pager': pager,
+			'archive_groups': archive_groups,
+			'searchbar_sortings': searchbar_sortings,
+			'sortby': sortby,
+			'searchbar_filters': OrderedDict(sorted(searchbar_filters.items())),
+			'filterby': filterby,
+			'default_url': '/my/purchase',
+		})
 		return request.render("rednuxportal.rednux_portal_purchase_orders", values)
 
 	# @http.route(['/my/purchase/<int:order_id>'], type='http', auth="public", website=True)
 	# def portal_my_purchase_order(self, order_id=None, access_token=None, **kw):
+
 	# 	try:
 	# 		order_sudo = self._document_check_access('purchase.order', order_id, access_token=access_token)
 	# 	except (AccessError, MissingError):
@@ -113,48 +124,63 @@ class CustomerPortal(CustomerPortal):
 	# 	values = self._purchase_order_get_page_view_values(order_sudo, access_token, **kw)
 	# 	if order_sudo.company_id:
 	# 		values['res_company'] = order_sudo.company_id
-	
-	# 	lieferant = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
-	# 	_logger.warning(lieferant)	
-	# 	if lieferant:
-	# 		values['x_lieferant'] = lieferant		
 
+	# 	lieferant = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
+
+	# 	if lieferant:
+	# 		values['x_lieferant'] = lieferant
+	# 	_logger.warning(values['x_lieferant'])
 	# 	return request.render("purchase.portal_my_purchase_order", values)
 
 	@route(route='/my/purchase/<int:order_id>', type='http', auth='public', website=True)
-	def portal_my_purchase_order(self, values=None, order_id=None, access_token=None, **kw):
+	def portal_my_purchase_order(self, order_id=None, access_token=None, **kw):
 		try:
-			order_sudo = self._document_check_access('purchase.order', order_id, access_token=access_token)
+			order_sudo = self._document_check_access(
+				'purchase.order', order_id, access_token=access_token)
 		except (AccessError, MissingError):
 			return request.redirect('/my')
-		values = self._purchase_order_get_page_view_values(order_sudo, access_token, **kw)
-		lieferant = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
-		_logger.warning(lieferant)	
+		values = self._purchase_order_get_page_view_values(
+			order_sudo, access_token, **kw)
+		lieferant = request.env['x_lieferanten'].search(
+			[('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
+
 		if lieferant:
-			values['x_lieferant'] = lieferant		
-		res = super().portal_my_purchase_order(order_id, values, access_token, **kw)
+			values['x_lieferant'] = lieferant
+		res = super().portal_my_purchase_order(order_id, access_token, **kw)
 		return res
 
+	@http.route(route='/my/purchase/<int:order_id>/update_remarks', type='json', auth='user', methods=['post'], website=True)
+	def rednux_portal_my_purchase_update_remarks(self, order_id=None, x_studio_shipment_remarks=None, access_token=None, **kw):
+		if x_studio_shipment_remarks:
+			purchase_order = request.env['purchase.order'].sudo().browse(order_id)
+			purchase_order.write({
+				'x_studio_shipment_remarks': x_studio_shipment_remarks,
+			})
+		
+	#	res = super().portal_my_purchase_order(order_id, access_token, **kw)
+	#	return res
+
+		
+				
 	@http.route(route='/my/purchase/<int:order_id>/update_status', type='http', auth='user', methods=['post'], website=True)
 	def rednux_portal_my_purchase_update_status(self, order_id=None, shipmentdate=None, access_token=None, **kw):
-		if shipmentdate:	
-			purchase_order = request.env['purchase.order'].sudo().browse(order_id)
+		if shipmentdate:
+			purchase_order = request.env['purchase.order'].sudo().browse(
+				order_id)
 			try:
 				purchase_order.write({
 					'x_studio_shipmentdate': shipmentdate,
 					'x_studio_status': 'confirmed'
-					})
+				})
 			except:
 				pass
 			picking_ids = purchase_order.picking_ids
-	
+
 			for picking in picking_ids:
 				try:
 					picking.write({
-					'scheduled_date': shipmentdate
+						'scheduled_date': shipmentdate
 					})
 				except:
-					pass	
+					pass
 		return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
-
-

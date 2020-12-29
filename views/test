@@ -1,0 +1,319 @@
+  <!--
+
+<?xml version="1.0"?>
+<t name="Portal: My Purchase Order" t-name="purchase.portal_my_purchase_order">
+		<t t-call="portal.portal_layout">
+			<t t-set="purchase_order" t-value="order"/>
+			<t t-set="o_portal_fullwidth_alert" groups="purchase.group_purchase_manager">
+				<t t-call="portal.portal_back_in_edit_mode">
+					<t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=%s&amp;id=%s&amp;action=%s&amp;view_type=form' % (purchase_order._name, purchase_order.id, purchase_order.env.ref('purchase.purchase_rfq').id)"/>
+				</t>
+			</t>
+			<div id="optional_placeholder"/>
+			<div class="container">
+				<div class="row mt16 o_portal_purchase_sidebar">
+					<!-- Sidebar -->
+					<t t-call="portal.portal_record_sidebar">
+						<t t-set="classes" t-value="'col-lg-auto d-print-none'"/>
+							<t t-set="title">
+								<h2 class="mb-0">
+									<b t-field="purchase_order.amount_total" data-id="total_amount"/>
+								</h2>
+							</t>
+						<t t-set="entries">
+							<ul class="list-group list-group-flush flex-wrap flex-row flex-lg-column">
+								<li class="list-group-item flex-grow-1">
+									<div class="o_download_pdf btn-toolbar flex-sm-nowrap">
+										<div class="btn-group flex-grow-1 mr-1 mb-1">
+											<a class="btn btn-secondary btn-block o_download_btn" t-att-href="purchase_order.get_portal_url(report_type='pdf', download=True)" title="Download">
+												<i class="fa fa-download"/>
+										Download
+											</a>
+										</div>
+										<div class="btn-group flex-grow-1 mb-1">
+											<a class="btn btn-secondary btn-block o_print_btn o_portal_invoice_print" t-att-href="purchase_order.get_portal_url(report_type='pdf')" id="print_invoice_report" title="Print" target="_blank">
+												<i class="fa fa-print"/>
+												Print
+											</a>
+										</div>
+									</div>
+								</li>
+								<li class="list-group-item flex-grow-1">
+									<div class="o_upload_pdf btn-toolbar flex-sm-nowrap">
+										<div class="btn-group flex-grow-1 mr-1 mb-1">
+											<div t-if="purchase_order.x_studio_upload_bill" class="mx-auto">
+												<strong>Bill Uploaded</strong>
+											</div>
+											<div t-else="">
+												<form t-att-action="'/my/purchase/%s/upload' % (purchase_order.id)" method="post" enctype="multipart/form-data">
+													<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+													<input name="file" type="file" class="form-control o_website_form_input"/>
+													<button type="submit" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</li>
+
+								<li t-if="purchase_order.user_id" class="list-group-item flex-grow-1">
+									<div class="small mb-1">
+										<strong class="text-muted">Purchase Representative</strong>
+									</div>
+									<div class="row flex-nowrap">
+										<div class="col flex-grow-0 pr-2">
+											<img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="purchase_order.user_id.image_1024" t-att-src="image_data_uri(purchase_order.user_id.image_1024)" alt="Contact"/>
+											<img class="rounded-circle mr4 float-left o_portal_contact_img" t-if="not purchase_order.user_id.image_1024" src="/web/static/src/img/placeholder.png" alt="Contact"/>
+										</div>
+										<div class="col pl-0" style="min-width: 150px">
+											<span t-field="purchase_order.user_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: True}"/>
+											<a href="#discussion" class="small">
+												<i class="fa fa-comment"/>
+												Send message
+											</a>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</t>
+					</t>
+					<div class=" col-lg col-12 justify-content-end w-100">
+						<div class="card pb-5">
+							<div class="card-header bg-white pb-1">
+								<div class="row">
+									<div class="col-lg-12">
+										<h2 class="font-weight-normal">
+											<t t-if="order.state in ['draft', 'sent']">
+												Request for Quotation
+											</t>
+											<t t-else="1">
+												Purchase Order
+											</t>
+											<span class="font-italic" t-esc="order.name"/>
+
+											      <span class="float-right" name="order.x_studio_status" t-esc="order.x_studio_status"/>
+											      		   
+										</h2>
+									</div>
+								</div>
+							</div>
+							<div class="card-body">
+							  <div class="row flex-nowrap">
+								<div class="col-lg-6 col-6">
+								<div class="mb-4">
+									<strong class="d-block mb-1">From:</strong>
+									<address t-field="order.company_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+									<strong>Confirmation Date:</strong>
+									<span t-field="order.date_approve" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+									<br/>
+									<div t-att-class="'d-inline' if order.date_planned else 'd-none'">
+										<strong>Receipt Date:</strong>
+										<span class="ml-1" t-field="order.date_planned" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+									</div>
+								</div>
+								</div>
+									<div class="col-lg-6 col-6 ml-auto">
+								<div class="mb-4">
+									<strong class="d-block mb-1">To:</strong>
+									<address t-field="order.company_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+		
+								</div>
+						
+								</div>
+								</div>
+								<form t-att-action="'/my/purchase/%s/update_status' % (purchase_order.id)" method="post">
+								  		<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+								  	<input t-if="order.x_studio_status == 'new'" t-placeholder="time.strftime('%d.%m.%Y')" t-default="time.strftime('%d.%m.%Y')" t-value="time.strftime('%d.%m.%Y')" id="shipmentdate" name="shipmentdate" type="date" class="form-control o_website_form_input o_website_form_date"/>
+			  				
+		
+										<button t-if="order.x_studio_status == 'new'">Order</button>
+												<button t-if="order.x_studio_status == 'confirmed' and x_lieferant.x_studio_dropshipping_art == 'Ja'">Update</button>
+												<!-- Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_art = ‘ja’”  ist,   -->
+								     <span class="float-right" name="x_lieferant.x_studio_dropshipping_art" t-esc="x_lieferant.x_studio_dropshipping_art"/>
+								</form>
+								<form t-if="order.picking_ids" class="o_form_delivery">
+									<div>
+										<strong>Delivery Orders</strong>
+									</div>
+							
+
+			  								
+									<div t-foreach="order.picking_ids.filtered(lambda picking: picking.picking_type_id.code != 'internal')" t-as="i" class="container">
+								
+										<div class="row container d-flex flex-wrap align-items-center o_purchase_stock_picking">
+											<div class="col-3">
+												<a t-att-href="'/my/picking/pdf/%s?%s' % (i.id, keep_query())">
+													<span t-esc="i.name"/>
+												</a>
+											</div>
+											<div class="col-3">
+												<input id="picking_id" type="hidden" name="picking_id" t-att-value="i.id"/>
+												<button id="picking_update" type="button" class="btn btn-link readonly" t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned']">
+													Update
+												</button>
+												<button id="picking_submit" type="submit" class="btn btn-link d-none editonly" t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned']">
+													Submit
+												</button>
+											</div>
+											<div class="col-3">
+												<input t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned']" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
+												<div id="picking_box" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="picking_box_label" aria-hidden="true">
+													<div class="modal-dialog" role="document">
+														<div class="modal-content">
+															<div class="modal-header">
+																<h5 id="picking_box_label" class="modal-title">
+																	Delivery
+																</h5>
+																<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+																	<span aria-hidden="true">×</span>
+																</button>
+															</div>
+															<div class="modal-body">
+																<table class="table table-sm">
+																	<thead class="bg-100">
+																		<tr>
+																			<th>Products</th>
+																			<th class="text-right">Demand</th>
+																			<th class="text-right">Done</th>
+																		</tr>
+																	</thead>
+																	<tbody>
+																		<tr t-foreach="i.move_ids_without_package" t-as="move">
+																			<input id="move_id" name="move_id" type="hidden" t-att-value="move.id"/>
+																			<td class="text-left">
+																				<span t-field="move.product_id.name"/>
+																			</td>
+																			<td class="text-right">
+																				<span t-field="move.product_uom_qty"/>
+																			</td>
+																			<td class="text-right">
+																				<input id="quantity_done" name="quantity_done" t-att-value="move.quantity_done" required="true"/>
+																			</td>
+																		</tr>
+																	</tbody>
+																</table>
+															</div>
+															<div class="modal-footer">
+																<button class="btn btn-secondary" data-dismiss="modal">
+																	Close
+																</button>
+																<button id="picking_validate" class="btn btn-primary">
+																	Submit
+																</button>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-3">
+												<span t-if="i.state == 'done'" class="float-right small badge badge-success orders_label_text_align">
+													<i class="fa fa-fw fa-truck"/>
+													<b>Delivered</b>
+												</span>
+												<span t-if="i.state == 'cancel'" class="float-right small badge badge-danger orders_label_text_align">
+													<i class="fa fa-fw fa-times"/>
+													<b>Cancelled</b>
+												</span>
+												<span t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned']" class="float-right small badge badge-info orders_label_text_align">
+													<i class="fa fa-fw fa-clock-o"/>
+													<b>Preparation</b>
+												</span>
+											</div>
+											<div class="col-3 small d-lg-inline-block">
+												Date:
+												<span t-if="i.state == 'done'" class="text-muted" t-field="i.date_done" t-options="{'date_only': True}"/>
+												<span t-if="i.state != 'done'" class="text-muted readonly" t-esc="i.scheduled_date.date()"/>
+												<input t-if="i.state != 'done'" type="date" name="scheduled_date" t-att-value="i.scheduled_date.date()" min="2010-01-01" class="d-none editonly" required="true"/>
+											</div>
+											<div class="col-4 small d-lg-inline-block">
+												Carrier:
+												<span class="text-muted readonly" t-esc="i.carrier_id.name"/>
+												<input name="carrier" t-att-value="i.carrier_id.name" class="d-none editonly" required="true"/>
+											</div>
+											<div class="col-4 small d-lg-inline-block">
+												Tracking Ref.:
+												<span class="text-muted readonly" t-esc="i.carrier_tracking_ref"/>
+												<input name="tracking_ref" t-att-value="i.carrier_tracking_ref" class="d-none editonly" required="true"/>
+											</div>
+										</div>
+									</div>
+								</form>
+								<h3 class="font-weight-normal">Pricing</h3>
+								<table class="table table-sm">
+									<thead class="bg-100">
+										<tr>
+											<th>Products</th>
+											<th class="text-right d-none d-sm-table-cell">Unit Price</th>
+											<th class="text-right">Quantity</th>
+											<th class="text-right">Subtotal</th>
+										</tr>
+									</thead>
+									<tbody>
+										<t t-foreach="order.order_line" t-as="ol">
+											<tr>
+												<td>
+													<img t-att-src="image_data_uri(resize_to_48(ol.product_id.image_1024))" alt="Product" class="d-none d-lg-inline"/>
+													<span t-esc="ol.name"/>
+												</td>
+												<td class="text-right d-none d-sm-table-cell">
+													<span t-field="ol.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.currency_id}"/>
+												</td>
+												<td class="text-right">
+													<span t-esc="ol.product_qty"/>
+												</td>
+												<td class="text-right">
+													<span t-field="ol.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.currency_id}"/>
+												</td>
+											</tr>
+										</t>
+									</tbody>
+								</table>
+								<div class="row">
+									<div class="col-sm-7 col-md-5 ml-auto">
+										<table class="table table-sm">
+											<tbody>
+												<tr>
+													<td>
+														<strong>Untaxed Amount:</strong>
+													</td>
+													<td class="text-right">
+														<span t-field="order.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.currency_id}"/>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<strong>Taxes:</strong>
+													</td>
+													<td class="text-right">
+														<span t-field="order.amount_tax" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.currency_id}"/>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<strong>Total:</strong>
+													</td>
+													<td class="text-right">
+														<span t-field="order.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: order.currency_id}"/>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="purchase_order_communication" class="mt-4">
+							<h2>History</h2>
+							<t t-call="portal.message_thread">
+								<t t-set="object" t-value="purchase_order"/>
+							</t>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="oe_structure mb32"/>
+		</t>
+	</t>
+
+	
+
+    -->

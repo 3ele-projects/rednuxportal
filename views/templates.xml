@@ -1,92 +1,79 @@
 <?xml version="1.0"?>
 <odoo>
 
-    <template id="rednux_portal" name="RednuxPortalMyHome" inherit_id="account.portal_my_home_invoice" priority="60">
+    <template id="rednux_portal" name="RednuxPortalMyHome" inherit_id="purchase.portal_my_home_purchase" priority="60">
+
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+            <t t-if="purchase_count_new" t-call="portal.portal_docs_entry">
                 <t t-set="title">new</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=new'"/>
                 <t t-set="count" t-value="purchase_count_new"/>
             </t>
 
-        </xpath>
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+
+            <t t-if="purchase_count_confirmed" t-call="portal.portal_docs_entry">
                 <t t-set="title">confirmed
                 </t>
-                <t
-                t-set="url" t-value="'/my/purchase?filterby=confirmed'"/>
-           <t t-set="count" t-value="purchase_count_confirmed"/> 
+                <t t-set="url" t-value="'/my/purchase?filterby=confirmed'"/>
+                <t t-set="count" t-value="purchase_count_confirmed"/>
             </t>
 
-        </xpath>
-
-
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+            <t t-if="purchase_count_delivered" t-call="portal.portal_docs_entry">
                 <t t-set="title">delivered</t>
-                <t
-                t-set="url" t-value="'/my/purchase?filterby=delivered'"/>
-      <t t-set="count" t-value="purchase_count_delivered"/> 
+                <t t-set="url" t-value="'/my/purchase?filterby=delivered'"/>
+                <t t-set="count" t-value="purchase_count_delivered"/>
             </t>
 
-        </xpath>
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+            <t t-if="purchase_count_billed" t-call="portal.portal_docs_entry">
                 <t t-set="title">billed
                 </t>
-                <t
-                t-set="url" t-value="'/my/purchase?filterby=billed'"/>
-             <t t-set="count" t-value="purchase_count_billed"/> 
+                <t t-set="url" t-value="'/my/purchase?filterby=billed'"/>
+                <t t-set="count" t-value="purchase_count_billed"/>
             </t>
 
-        </xpath>
-        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="invoice_count" t-call="portal.portal_docs_entry">
+            <t t-if="purchase_count_paid" t-call="portal.portal_docs_entry">
                 <t t-set="title">paid</t>
-                <t
-                t-set="url" t-value="'/my/purchase?filterby=paid'"/>
-                      <t t-set="count" t-value="purchase_count_paid"/> 
-       
+                <t t-set="url" t-value="'/my/purchase?filterby=paid'"/>
+                <t t-set="count" t-value="purchase_count_paid"/>
+
             </t>
 
         </xpath>
-
 
 
         <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
-        <div class="row">
-            <table>
-                <thead>
-                    <th></th>
-                    <th>new</th>
-                    <th>confirmed</th>
-                    <th>ready for delivery</th>
-                    <th>delivered</th>
-                    <th>billed</th>
-                </thead>
-                <tbody>
+            <div class="row">
+                <table>
+                    <thead>
+                        <th></th>
+                        <th>new</th>
+                        <th>confirmed</th>
+                        <th>ready for delivery</th>
+                        <th>delivered</th>
+                        <th>billed</th>
+                    </thead>
+                    <tbody>
 
-                    <tr>
-                        <td>total</td>
-                        <td>adfsdafsdf</td>
-                        <td>adfsdafsdf</td>
-                        <td>adfsdafsdf</td>
-                        <td>adfsdafsdf</td>
-                        <td>adfsdafsdf</td>
-                    </tr>
+                        <tr>
+                            <td>total</td>
+                            <td>adfsdafsdf</td>
+                            <td>adfsdafsdf</td>
+                            <td>adfsdafsdf</td>
+                            <td>adfsdafsdf</td>
+                            <td>adfsdafsdf</td>
+                        </tr>
 
-                    <tr>
-                        <td>total value</td>
-                        <td><span t-esc="x_lieferanten.x_studio_ordered"/></td>
-                        <td><span t-esc="x_lieferanten.x_studio_confirmed"/></td>
-                        <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery"/></td>
-                        <td><span t-esc="x_lieferanten.x_studio_delivered"/></td>
-                        <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
-                    </tr>
+                        <tr>
+                            <td>total value</td>
+                            <td><span t-esc="x_lieferanten.x_studio_ordered"/></td>
+                            <td><span t-esc="x_lieferanten.x_studio_confirmed"/></td>
+                            <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery"/></td>
+                            <td><span t-esc="x_lieferanten.x_studio_delivered"/></td>
+                            <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
+                        </tr>
 
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
             </div>
         </xpath>
 
@@ -132,7 +119,7 @@
         </xpath>
     </template>
 
-    <template id="rednux_portal_purchase" name="RednuxPortal" inherit_id="vendor_purchase_order.portal_my_purchase_order_update_date" primary="True">
+    <template id="portal_my_purchase_order" name="Portal: My Purchase Order" inherit_id="purchase.portal_my_purchase_order" priority="99">
         <xpath expr="//div[hasclass('card-header')]" position="replace">
             <div class="card-header">
                 <div class="row">
@@ -145,103 +132,151 @@
                                 Purchase Order
                             </t>
                             <span t-esc="order.name"/>
-                            <span t-esc="order.x_studio_status"/>
+                            <span class="float-right" t-esc="order.x_studio_status"/>
                         </h4>
                     </div>
                 </div>
             </div>
         </xpath>
-        <xpath expr="//div[hasclass('card-body')]" position="replace">
-            <div class="card-body">
-                <div class="mb-4">
-                    <strong>Confirmation Date:</strong>
-                    <span t-field="order.date_approve" t-options='{"widget": "date"}'/><br/>
-                    <div t-att-class="'d-inline' if order.date_planned else 'd-none'">
-                        <strong>Receipt Date:</strong><span class="ml-1" t-field="order.date_planned" t-options='{"widget": "date"}'/>
-                    </div>
-                </div>
-                <h3 class="font-weight-normal">Pricing</h3>
-                <table class="table table-sm">
-                    <thead class="bg-100">
-                        <tr>
-                            <th>Products</th>
-                            <th class="text-right d-none d-sm-table-cell">Unit Price</th>
-                            <th class="text-right">Quantity</th>
-                            <th class="text-right">Scheduled Date</th>
-                            <th class="text-right" style="color:#3aadaa">
-                                <strong>Update Dates Here</strong>
-                            </th>
-                            <th class="text-right">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <t t-foreach="order.order_line" t-as="ol">
-                            <tr>
-                                <td>
-                                    <img t-att-src="image_data_uri(resize_to_48(ol.product_id.image_1024))" alt="Product" class="d-none d-lg-inline"/>
-                                    <span t-esc="ol.name"/>
-                                </td>
-                                <td class="text-right d-none d-sm-table-cell">
-                                    <span t-field="ol.price_unit" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-esc="ol.product_qty"/>
-                                </td>
-                                <td class="text-right">
-                                    <span t-esc="ol.date_planned.date()"/>
-                                </td>
-                                <td class="text-right">
-                                    <form t-attf-action="/my/purchase/#{order.id}/update?access_token=#{order.access_token}" method="post">
-                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                                        <div class="container">
-                                            <div class="form-group">
-                                                <div class="input-group date">
-                                                    <input type="text" class="form-control datetimepicker-input o-purchase-datetimepicker" t-attf-id="datetimepicker_#{ol.id}" t-att-name="ol.id" data-toggle="datetimepicker" data-date-format="YYYY-MM-DD" t-attf-data-target="#datetimepicker_#{ol.id}"/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </td>
-                                <td class="text-right">
-                                    <span t-field="ol.price_subtotal" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                </td>
-                            </tr>
-                        </t>
-                    </tbody>
-                </table>
+
+        <xpath expr="//div[hasclass('card-body')]/div[@class='mb-4']" position="replace">
+            <div class="mb-4">
                 <div class="row">
-                    <div class="col-sm-7 col-md-5 ml-auto">
-                        <table class="table table-sm">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <strong>Untaxed Amount:</strong>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="order.amount_untaxed" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>Taxes:</strong>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="order.amount_tax" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <strong>Total:</strong>
-                                    </td>
-                                    <td class="text-right">
-                                        <span t-field="order.amount_total" t-options='{"widget": "monetary", "display_currency": order.currency_id}'/>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="col-lg-6">
+                        <strong class="d-block mb-1">To:</strong>
+                        <address t-field="order.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+
+                        <br/>
+                        <div t-att-class="'d-inline' if order.date_planned else 'd-none'">
+                            <strong>Receipt Date:</strong>
+                            <span class="ml-1" t-field="order.date_planned" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                        </div>
+                        <br/>
+                        <strong>Confirmation Date:</strong>
+                        <span t-field="order.date_approve" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                        <br/>
+                        <strong>Shipment Date:</strong>
+                        
+                        <input id="x_studio_shipmentdate"  t-field="order.x_studio_shipmentdate" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                    <!-- 	<input t-if="order.x_studio_status == 'new'" t-placeholder="time.strftime('%d.%m.%Y')" t-default="time.strftime('%d.%m.%Y')" t-value="time.strftime('%d.%m.%Y')" id="shipmentdate" name="shipmentdate" type="date" class="form-control o_website_form_input o_website_form_date"/>
+
                     </div>
+                    <div class="col-lg-6">
+                        <strong class="d-block mb-1">From:</strong>
+                        <address t-field="order.company_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+
+
+                    </div>
+
                 </div>
             </div>
         </xpath>
+
+        <xpath expr="//div[hasclass('card-body')]" position="after">
+            <div class="card-footer">
+
+
+                <!--		<button t-if="order.x_studio_status == 'new'">Order</button>-->
+                <!--	<button t-if="order.x_studio_status == 'confirmed' and x_lieferant.x_studio_dropshipping_art == 'Ja'">Update</button>-->
+                <!-- Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_art = ‘ja’”  ist,   -->
+                <!--	     <span class="float-right" name="x_lieferant.x_studio_dropshipping_art" t-esc="x_lieferant.x_studio_dropshipping_art"/> -->
+                <!--
+                                                                                                                                  	<span class="ml-1" t-field="order.x_studio_delayed_shipment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                                                                                                                                      -->
+
+                   <!-- <form t-if="order.picking_ids" t-att-action="'/my/purchase/%s/update_remarks' % (purchase_order.id)" method="post" class="o_form_rednux_lieferant"> -->
+                 
+
+                    <form t-if="order.picking_ids" method="post" class="o_form_rednux_lieferanten"> 
+                    <input  type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <!-- 	<input t-if="order.x_studio_status == 'new'" t-placeholder="time.strftime('%d.%m.%Y')" t-default="time.strftime('%d.%m.%Y')" t-value="time.strftime('%d.%m.%Y')" id="shipmentdate" name="shipmentdate" type="date" class="form-control o_website_form_input o_website_form_date"/>
+                                                                                                                                                                            -->
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <span>delayed shipmentdate:
+                            </span>
+                        </div>
+                        <div class="col-lg-3">
+                            <span class="ml-1" t-field="order.x_studio_delayed_shipment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                        </div>
+
+                    </div>
+                    <span>shipment remarks</span>
+                    <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks"/>
+                    <button type="button"  id="remark_update" class="btn btn-link readonly">Update</button>
+
+                </form>
+
+
+            </div>
+
+        </xpath>
+
+
+        <xpath expr="//input[@name='file']" position="replace">
+            <input name="file" type="file"  t-if="order.x_studio_status == 'confirmed' and x_lieferanten.x_studio_dropshipping_art == 'ja'" class="form-control o_website_form_input"/>
+        </xpath>
+
+
+        <xpath expr="//button[hasclass('o_upload_btn')]" position="replace">
+            <button type="submit" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
+        </xpath>
+
+
+        <xpath expr="//button[@id='picking_update']" position="replace">
+            <button id="picking_update"  type="button" class="btn btn-link readonly" >
+                Update
+            </button>
+        </xpath>
+
+
+        <xpath
+            expr="//button[@id='picking_submit']" position="replace">
+            <!--
+                                    Wenn “purchase.order.x_studio_status='ordered'“ (new) ist, 
+                                    → dann wird eine Möglichkeit zur Bestätigung der Lieferung mit setzen des voraussichtlichen Datums benötigt. Als Vorschlag soll das aktuelle Datum + 1Tag angezeigt werden. Alle anderen Schaltflächen “Update“, “Validate” “Upload” sind deaktiviert.
+                                    Nach dem Bestätigen wird der purchase.order.x_studio_status='confirmed' gesetzt und das erfasste Datum in purchase.order.x_studio_shipmentdate and alle zugehörigen stock.picking.scheduled_date. Der “Bestätigung“ Button ist dann deaktiviert bzw. nur aktiviert wenn purchase.order.x_studio_status='ordered'
+                                    
+                                    Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_art = ‘ja’”  ist, 
+                                    → dann ist die Schaltfläche “Update“ aktiv, Schaltfläche “Validate” ist nicht aktiv. 
+                                    
+                                    
+                                    Über die Update Funktion muss der User die Felder ‘Carrier’ und ‘Tracking Ref.’ ausfüllen. Sind diese Felder ausgefüllt, wird die Schaltfläche “Validate” aktiv kann. Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='delivered' gesetzt. 
+                                    
+                                    Wenn “purchase.order.x_studio_status='confirmed'“ & “x_studio_dropshipping_art = ‘ja - ohne Versand’ ” ist, 
+                                    → dann Schaltfläche “Validate” ist aktiv,  Schaltfläche “Update” ist deaktiviert . Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='ready_for_delivery' gesetzt. 
+                                    
+                                    Wenn “purchase.order.x_studio_status='ready_for_delivery' oder purchase.order.x_studio_status='delivered'“ ist, 
+                                    → dann ist das Feld “Datei Auswahl” (für den Upload der Rechnung) aktiviert, Nach der Auswahl der Datei ist das Feld Upload aktiv. Hängt eine Rechnung an der Bestellung, ist der Status der Bestellung purchase.order.x_studio_status='billed' 
+                                    
+                                    Wenn der Status “purchase.order.x_studio_status='billed'“ ist, 
+                                    → dann sind alle Felder deaktiviert
+                                    
+                                    Wenn der Status “purchase.order.x_studio_status='paid'“ ist, 
+                                    → dann sind alle Felder deaktiviert
+                                    
+                                    t-if="1+1 and order.x_studio_status == 'confirmed' or "
+                                    
+                                    
+                                    purchase.order.x_studio_status='new'
+                                    not “Update“, “Validate” “Upload”
+                                    
+                                    
+                                    -->
+            <button id="picking_submit" type="submit" class="btn btn-link d-none editonly" t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status == 'confirmed' and x_lieferanten.x_studio_dropshipping_art == 'ja'">
+                Submit
+            </button>
+        </xpath>
+
     </template>
+
+
+    <template id="assets_frontend" inherit_id="website.assets_frontend">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/rednuxportal/static/src/js/rednux_portal.js"/>
+        </xpath>
+    </template>
+
+    <template id="portal_my_purchase_order_inherit" inherit_id="vendor_purchase_order.portal_my_purchase_order_update_date" name="Portal: My Purchase Order"></template>
+
 </odoo>
