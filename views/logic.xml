@@ -1,0 +1,39 @@
+Wenn “purchase.order.x_studio_status='ordered'“ (new) ist, 
+→ dann wird eine Möglichkeit zur Bestätigung der Lieferung mit setzen des voraussichtlichen Datums benötigt. 
+Als Vorschlag soll das aktuelle Datum + 1Tag angezeigt werden. 
+Alle anderen Schaltflächen “Update“, “Validate” “Upload” 
+sind deaktiviert.
+/* done */
+Nach dem Bestätigen wird der purchase.order.x_studio_status='confirmed' gesetzt 
+/* done */
+und das erfasste Datum in purchase.order.x_studio_shipmentdate and alle zugehörigen stock.picking.scheduled_date. Der “Bestätigung“ Button ist dann deaktiviert bzw. nur aktiviert wenn purchase.order.x_studio_status='ordered'
+
+/* done */
+Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_art = ‘ja’”  ist, 
+→ dann ist die Schaltfläche “Update“ aktiv, Schaltfläche “Validate” ist nicht aktiv. 
+
+
+Über die Update Funktion muss der User die Felder ‘Carrier’ und ‘Tracking Ref.’ ausfüllen. Sind diese Felder ausgefüllt, wird die Schaltfläche “Validate” aktiv kann. Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='delivered' gesetzt. 
+
+
+Wenn “purchase.order.x_studio_status='confirmed'“ & “x_studio_dropshipping_art = ‘ja - ohne Versand’ ” ist, 
+→ dann Schaltfläche “Validate” ist aktiv,  Schaltfläche “Update” ist deaktiviert . Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='ready_for_delivery' gesetzt. 
+
+
+
+Wenn “purchase.order.x_studio_status='ready_for_delivery' oder purchase.order.x_studio_status='delivered'“ ist, 
+→ dann ist das Feld “Datei Auswahl” (für den Upload der Rechnung) aktiviert, Nach der Auswahl der Datei ist das Feld Upload aktiv. Hängt eine Rechnung an der Bestellung, ist der Status der Bestellung purchase.order.x_studio_status='billed' 
+
+
+
+Wenn der Status “purchase.order.x_studio_status='billed'“ ist, 
+→ dann sind alle Felder deaktiviert
+
+Wenn der Status “purchase.order.x_studio_status='paid'“ ist, 
+→ dann sind alle Felder deaktiviert
+
+t-if="1+1 and order.x_studio_status == 'confirmed' or "
+
+
+purchase.order.x_studio_status='new'
+not “Update“, “Validate” “Upload”

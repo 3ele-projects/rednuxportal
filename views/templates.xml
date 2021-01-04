@@ -2,7 +2,23 @@
 <odoo>
 
     <template id="rednux_portal" name="RednuxPortalMyHome" inherit_id="purchase.portal_my_home_purchase" priority="60">
+<!--
 
+                 <td><span t-esc="x_lieferanten.x_studio_ordered_count"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_confirmed_count"/></td>
+                                <td><span t-esc="x_lieferanten.	x_studio_ready_for_delivery_count"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_delivered_count"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
+                            </tr>
+
+                            <tr>
+                                <td>total value</td>
+                   
+              
+                      
+                                <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
+
+-->
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-if="purchase_count_new" t-call="portal.portal_docs_entry">
                 <t t-set="title">new</t>
@@ -11,24 +27,24 @@
             </t>
 
 
-            <t t-if="purchase_count_confirmed" t-call="portal.portal_docs_entry">
+            <t t-if="x_lieferanten.x_studio_confirmed" t-call="portal.portal_docs_entry">
                 <t t-set="title">confirmed
                 </t>
                 <t t-set="url" t-value="'/my/purchase?filterby=confirmed'"/>
-                <t t-set="count" t-value="purchase_count_confirmed"/>
+                <t t-set="count" t-value="x_lieferanten.x_studio_confirmed_count"/>
             </t>
 
-            <t t-if="purchase_count_delivered" t-call="portal.portal_docs_entry">
+            <t t-if="x_lieferanten.x_studio_ready_for_delivery" t-call="portal.portal_docs_entry">
                 <t t-set="title">delivered</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=delivered'"/>
-                <t t-set="count" t-value="purchase_count_delivered"/>
+                <t t-set="count" t-value="x_lieferanten.x_studio_ready_for_delivery"/>
             </t>
 
-            <t t-if="purchase_count_billed" t-call="portal.portal_docs_entry">
+            <t t-if="x_lieferanten.x_studio_billed_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">billed
                 </t>
                 <t t-set="url" t-value="'/my/purchase?filterby=billed'"/>
-                <t t-set="count" t-value="purchase_count_billed"/>
+                <t t-set="count" t-value="x_lieferanten.x_studio_billed_count"/>
             </t>
 
             <t t-if="purchase_count_paid" t-call="portal.portal_docs_entry">
@@ -43,37 +59,39 @@
 
         <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
             <div class="row">
-                <table>
-                    <thead>
-                        <th></th>
-                        <th>new</th>
-                        <th>confirmed</th>
-                        <th>ready for delivery</th>
-                        <th>delivered</th>
-                        <th>billed</th>
-                    </thead>
-                    <tbody>
+                <div class="col-12">
+                    <table>
+                        <thead>
+                            <th></th>
+                            <th>new</th>
+                            <th>confirmed</th>
+                            <th>ready for delivery</th>
+                            <th>delivered</th>
+                            <th>billed</th>
+                        </thead>
+                        <tbody>
 
-                        <tr>
-                            <td>total</td>
-                            <td>adfsdafsdf</td>
-                            <td>adfsdafsdf</td>
-                            <td>adfsdafsdf</td>
-                            <td>adfsdafsdf</td>
-                            <td>adfsdafsdf</td>
-                        </tr>
+                            <tr>
+                                <td>total</td>
+                                <td><span t-esc="x_lieferanten.x_studio_ordered_count"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_confirmed_count"/></td>
+                                <td><span t-esc="x_lieferanten.	x_studio_ready_for_delivery_count"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_delivered_count"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
+                            </tr>
 
-                        <tr>
-                            <td>total value</td>
-                            <td><span t-esc="x_lieferanten.x_studio_ordered"/></td>
-                            <td><span t-esc="x_lieferanten.x_studio_confirmed"/></td>
-                            <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery"/></td>
-                            <td><span t-esc="x_lieferanten.x_studio_delivered"/></td>
-                            <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
-                        </tr>
+                            <tr>
+                                <td>total value</td>
+                                <td><span t-esc="x_lieferanten.x_studio_ordered"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_confirmed"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_delivered"/></td>
+                                <td><span t-esc="x_lieferanten.x_studio_billed"/></td>
+                            </tr>
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </xpath>
 
@@ -156,10 +174,20 @@
                         <span t-field="order.date_approve" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
                         <br/>
                         <strong>Shipment Date:</strong>
-                        
-                        <input id="x_studio_shipmentdate"  t-field="order.x_studio_shipmentdate" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
-                    <!-- 	<input t-if="order.x_studio_status == 'new'" t-placeholder="time.strftime('%d.%m.%Y')" t-default="time.strftime('%d.%m.%Y')" t-value="time.strftime('%d.%m.%Y')" id="shipmentdate" name="shipmentdate" type="date" class="form-control o_website_form_input o_website_form_date"/>
 
+
+                        <span class="text-muted readonly" t-esc="order.x_studio_shipmentdate"/>
+
+
+                        <form t-if="order.x_studio_status == 'new'" id="" method="post" class="o_form_rednux_lieferanten">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" id="order_id" name="order_id" t-att-value="order.id"/>
+
+                            <span t-set="shipmentdate" t-value="datetime.datetime.today() + datetime.timedelta(1)"/>
+                            <input id="shipmentdate" type="date" name="shipmentdate" t-att-value="shipmentdate.strftime('%d.%m.%Y')" min="28.12.2020" placeholder="DD.MM.YYYY" class="" required="true"/>
+
+                            <button id="x_studio_shipmentdate" type="button">set date</button>
+                        </form>
                     </div>
                     <div class="col-lg-6">
                         <strong class="d-block mb-1">From:</strong>
@@ -176,21 +204,8 @@
             <div class="card-footer">
 
 
-                <!--		<button t-if="order.x_studio_status == 'new'">Order</button>-->
-                <!--	<button t-if="order.x_studio_status == 'confirmed' and x_lieferant.x_studio_dropshipping_art == 'Ja'">Update</button>-->
-                <!-- Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_art = ‘ja’”  ist,   -->
-                <!--	     <span class="float-right" name="x_lieferant.x_studio_dropshipping_art" t-esc="x_lieferant.x_studio_dropshipping_art"/> -->
-                <!--
-                                                                                                                                  	<span class="ml-1" t-field="order.x_studio_delayed_shipment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
-                                                                                                                                      -->
+                    <form method="post" class="o_form_rednux_lieferanten"> <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
-                   <!-- <form t-if="order.picking_ids" t-att-action="'/my/purchase/%s/update_remarks' % (purchase_order.id)" method="post" class="o_form_rednux_lieferant"> -->
-                 
-
-                    <form t-if="order.picking_ids" method="post" class="o_form_rednux_lieferanten"> 
-                    <input  type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                    <!-- 	<input t-if="order.x_studio_status == 'new'" t-placeholder="time.strftime('%d.%m.%Y')" t-default="time.strftime('%d.%m.%Y')" t-value="time.strftime('%d.%m.%Y')" id="shipmentdate" name="shipmentdate" type="date" class="form-control o_website_form_input o_website_form_date"/>
-                                                                                                                                                                            -->
                     <div class="row">
                         <div class="col-lg-3">
                             <span>delayed shipmentdate:
@@ -202,8 +217,11 @@
 
                     </div>
                     <span>shipment remarks</span>
-                    <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks"/>
-                    <button type="button"  id="remark_update" class="btn btn-link readonly">Update</button>
+                    <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks">
+           
+                   <t t-esc="order.x_studio_shipment_remarks"/>
+                    </textarea>
+                    <button type="button" t-att-value="order.id" id="remark_update" class="btn btn-link readonly">Update</button>
 
                 </form>
 
@@ -213,8 +231,10 @@
         </xpath>
 
 
-        <xpath expr="//input[@name='file']" position="replace">
-            <input name="file" type="file"  t-if="order.x_studio_status == 'confirmed' and x_lieferanten.x_studio_dropshipping_art == 'ja'" class="form-control o_website_form_input"/>
+        <xpath
+            expr="//input[@name='file']" position="replace">
+            <!-- -->
+            <input name="file" type="file" t-if="order.x_studio_status == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'" class="form-control o_website_form_input"/>
         </xpath>
 
 
@@ -224,46 +244,36 @@
 
 
         <xpath expr="//button[@id='picking_update']" position="replace">
-            <button id="picking_update"  type="button" class="btn btn-link readonly" >
+            <button id="picking_update" t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status  == 'confirmed')" type="button" class="btn btn-link readonly">
                 Update
             </button>
+        </xpath>
+
+        <xpath expr="//input[@value='Validate']" position="replace">
+            <input t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status  == 'delivered' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja')" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
+
+
+        </xpath>
+
+        <xpath expr="//input[@name='carrier']" position="replace">
+ <select  name="carrier" 		
+ class="d-none editonly"
+required="true">
+        <t t-foreach="carrier" t-as="carrier" >
+          <option  t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
+     </t>
+ </select>
+   
+
+
         </xpath>
 
 
         <xpath
             expr="//button[@id='picking_submit']" position="replace">
-            <!--
-                                    Wenn “purchase.order.x_studio_status='ordered'“ (new) ist, 
-                                    → dann wird eine Möglichkeit zur Bestätigung der Lieferung mit setzen des voraussichtlichen Datums benötigt. Als Vorschlag soll das aktuelle Datum + 1Tag angezeigt werden. Alle anderen Schaltflächen “Update“, “Validate” “Upload” sind deaktiviert.
-                                    Nach dem Bestätigen wird der purchase.order.x_studio_status='confirmed' gesetzt und das erfasste Datum in purchase.order.x_studio_shipmentdate and alle zugehörigen stock.picking.scheduled_date. Der “Bestätigung“ Button ist dann deaktiviert bzw. nur aktiviert wenn purchase.order.x_studio_status='ordered'
-                                    
-                                    Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_art = ‘ja’”  ist, 
-                                    → dann ist die Schaltfläche “Update“ aktiv, Schaltfläche “Validate” ist nicht aktiv. 
-                                    
-                                    
-                                    Über die Update Funktion muss der User die Felder ‘Carrier’ und ‘Tracking Ref.’ ausfüllen. Sind diese Felder ausgefüllt, wird die Schaltfläche “Validate” aktiv kann. Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='delivered' gesetzt. 
-                                    
-                                    Wenn “purchase.order.x_studio_status='confirmed'“ & “x_studio_dropshipping_art = ‘ja - ohne Versand’ ” ist, 
-                                    → dann Schaltfläche “Validate” ist aktiv,  Schaltfläche “Update” ist deaktiviert . Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='ready_for_delivery' gesetzt. 
-                                    
-                                    Wenn “purchase.order.x_studio_status='ready_for_delivery' oder purchase.order.x_studio_status='delivered'“ ist, 
-                                    → dann ist das Feld “Datei Auswahl” (für den Upload der Rechnung) aktiviert, Nach der Auswahl der Datei ist das Feld Upload aktiv. Hängt eine Rechnung an der Bestellung, ist der Status der Bestellung purchase.order.x_studio_status='billed' 
-                                    
-                                    Wenn der Status “purchase.order.x_studio_status='billed'“ ist, 
-                                    → dann sind alle Felder deaktiviert
-                                    
-                                    Wenn der Status “purchase.order.x_studio_status='paid'“ ist, 
-                                    → dann sind alle Felder deaktiviert
-                                    
-                                    t-if="1+1 and order.x_studio_status == 'confirmed' or "
-                                    
-                                    
-                                    purchase.order.x_studio_status='new'
-                                    not “Update“, “Validate” “Upload”
-                                    
-                                    
-                                    -->
-            <button id="picking_submit" type="submit" class="btn btn-link d-none editonly" t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status == 'confirmed' and x_lieferanten.x_studio_dropshipping_art == 'ja'">
+            <!--       <button id="picking_submit" type="submit" class="btn btn-link d-none editonly" t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'">
+                        -->
+            <button id="picking_submit" type="submit" class="btn btn-link d-none editonly">
                 Submit
             </button>
         </xpath>
@@ -271,12 +281,7 @@
     </template>
 
 
-    <template id="assets_frontend" inherit_id="website.assets_frontend">
-        <xpath expr="script[last()]" position="after">
-            <script type="text/javascript" src="/rednuxportal/static/src/js/rednux_portal.js"/>
-        </xpath>
-    </template>
+   
 
-    <template id="portal_my_purchase_order_inherit" inherit_id="vendor_purchase_order.portal_my_purchase_order_update_date" name="Portal: My Purchase Order"></template>
 
 </odoo>

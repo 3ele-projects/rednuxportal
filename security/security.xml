@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2015-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE file for full copyright and licensing details. -->
+<!-- "License URL : <https://store.webkul.com/license.html/>" -->
+<odoo>
+	<data>
+		<record id="group_purchase_vendor" model="res.groups">
+			<field name="name">Purchase / Vendor</field>
+		</record>
+
+		<record id="base.group_portal" model="res.groups">
+			<field name="name">Portal</field>
+			<field name="implied_ids" eval="[(4, ref('group_purchase_vendor'))]"/>
+		</record>
+	</data>
+
+	<data>
+		<record id="vendor_purchase_orders" model="ir.rule">
+			<field name="name">Orders for vendor</field>
+			<field name="model_id" ref="purchase.model_purchase_order"/>
+			<field name="domain_force">[('partner_id','=',user.partner_id.id)]</field>
+			<field name="groups" eval="[(4,ref('group_purchase_vendor'))]"/>
+		</record>
+	</data>
+</odoo>

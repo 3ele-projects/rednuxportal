@@ -1,21 +1,19 @@
 <odoo>
   <data>
-
- <!--
-
-  <record id="res_partner_kanban_inherit" model="ir.ui.view">
+  <record id="res_partner_inherit" model="ir.ui.view">
     <field name="name">res.partner.inheritform</field>
     <field name="model">res.partner</field>
     <field name="inherit_id" ref="studio_customization.odoo_studio_res_part_1624dea3-3cf7-466f-975f-bb748e1b7a8d"/>
     <field name="arch" type="xml">
 
     <xpath expr="//page[@name='studio_page_2nBju']" position="inside">
-    <field name="x_lieferant_id"/>
+    <field name="lieferant_id"/>
+
   </xpath>
     </field>
 </record>
 
 
--->
+
   </data>
 </odoo>	

@@ -1,0 +1,10 @@
+ <odoo>
+ <template id="assets_frontend" inherit_id="website.assets_frontend">
+        <xpath expr="script[last()]" position="after">
+            <script type="text/javascript" src="/rednuxportal/static/src/js/rednux_portal.js"/>
+        </xpath>
+       
+             <xpath expr="script[@src='/vendor_purchase_order/static/src/js/delivery_orders.js']"  position="replace">
+        </xpath>
+    </template>
+    </odoo>

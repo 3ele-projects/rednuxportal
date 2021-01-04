@@ -38,9 +38,12 @@ class CustomerPortal(CustomerPortal):
 			[('x_studio_status', '=', 'paid')])
 		values['x_lieferanten'] = request.env['x_lieferanten'].search(
 			[('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])
-
-		_logger.warning(values)
-	#		x_studio_field_kontakt
+		_logger.warning(request.env.user.partner_id['lieferant_id'])
+		if (request.env.user.partner_id.x_studio_kontakt_art):
+			values['invoice_count'] = 0
+			values['purchase_count'] = 0
+			values[''] = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])		
+			
 		return values
 
 	@http.route(['/my/purchase', '/my/purchase/page/<int:page>'], type='http', auth="user", website=True)
@@ -139,15 +142,24 @@ class CustomerPortal(CustomerPortal):
 				'purchase.order', order_id, access_token=access_token)
 		except (AccessError, MissingError):
 			return request.redirect('/my')
-		values = self._purchase_order_get_page_view_values(
-			order_sudo, access_token, **kw)
-		lieferant = request.env['x_lieferanten'].search(
-			[('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
+		values = self._purchase_order_get_page_view_values(order_sudo, access_token, **kw)
+		values['carrier'] = request.env['delivery.carrier'].sudo().search([])
+		_logger.warning(values['carrier'])
 
-		if lieferant:
-			values['x_lieferant'] = lieferant
-		res = super().portal_my_purchase_order(order_id, access_token, **kw)
-		return res
+		if order_sudo.company_id:
+			values['res_company'] = order_sudo.company_id
+
+		return request.render("purchase.portal_my_purchase_order", values)
+	#	values = self._purchase_order_get_page_view_values(
+#			order_sudo, access_token, **kw)
+		
+#		lieferant = request.env['x_lieferanten'].search(
+#			[('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
+
+	#	if lieferant:
+#			values['x_lieferant'] = lieferant
+#		res = super().portal_my_purchase_order(order_id, access_token, **kw)
+#		return res
 
 	@http.route(route='/my/purchase/<int:order_id>/update_remarks', type='json', auth='user', methods=['post'], website=True)
 	def rednux_portal_my_purchase_update_remarks(self, order_id=None, x_studio_shipment_remarks=None, access_token=None, **kw):
@@ -160,9 +172,36 @@ class CustomerPortal(CustomerPortal):
 	#	res = super().portal_my_purchase_order(order_id, access_token, **kw)
 	#	return res
 
+	@route(route='/my/picking/<int:picking_id>', type='json', auth='user', website=True)
+	def update_picking_info(self, picking_id=None, access_token=None, **kw):
+		vals = {}
+
+		carrier_name = kw.get('carrier')
+		carrier_tracking_ref = kw.get('tracking_ref')
+		if carrier_tracking_ref:
+			vals['carrier_tracking_ref'] = carrier_tracking_ref
+		
+		carrier_id = False
+		carrier_name = kw.get('carrier')
+		if carrier_name:
+			carrier_id = request.env['delivery.carrier'].sudo().search(
+				[('name', '=', carrier_name)],
+				limit=1
+			)
+
+		if carrier_id:
+			vals['carrier_id'] = carrier_id.id
+
+		date = kw.get('date')
+		if date:
+			vals['scheduled_date'] = parse(date)
+
+		if picking_id:
+			picking_id = request.env['stock.picking'].sudo().browse(picking_id)
+			picking_id.write(vals)
 		
 				
-	@http.route(route='/my/purchase/<int:order_id>/update_status', type='http', auth='user', methods=['post'], website=True)
+	@http.route(route='/my/purchase/<int:order_id>/update_status', type='json', auth='user', methods=['post'], website=True)
 	def rednux_portal_my_purchase_update_status(self, order_id=None, shipmentdate=None, access_token=None, **kw):
 		if shipmentdate:
 			purchase_order = request.env['purchase.order'].sudo().browse(
@@ -183,4 +222,46 @@ class CustomerPortal(CustomerPortal):
 					})
 				except:
 					pass
-		return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
+		#return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
+
+
+	# @route(route='/my/picking/<int:picking_id>', type='json', auth='user', website=True)
+	# def update_picking_info(self, picking_id=None, access_token=None, **kw):
+	# 	vals = {}
+	# 	carrier_tracking_ref = kw.get('tracking_ref')
+	# 	if carrier_tracking_ref:
+	# 		vals['carrier_tracking_ref'] = carrier_tracking_ref
+
+	# 	carrier_id = False
+	# 	carrier_name = kw.get('carrier')
+	# 	if carrier_name:
+	# 		carrier_id = request.env['delivery.carrier'].sudo().search(
+	# 			[('name', '=', carrier_name)],
+	# 			limit=1
+	# 		)
+	# 		if not carrier_id:
+	# 			product_id = request.env['product.template'].sudo().create({'name': carrier_name})
+	# 			carrier_id = request.env['delivery.carrier'].sudo().create(
+	# 				{
+	# 					'name'      : carrier_name,
+	# 					'product_id': product_id.id,
+	# 				}
+	# 			)
+	# 	if carrier_id:
+	# 		vals['carrier_id'] = carrier_id.id
+
+	# 	date = kw.get('date')
+	# 	if date:
+	# 		vals['scheduled_date'] = parse(date)
+
+	# 	if picking_id:
+	# 		picking_id = request.env['stock.picking'].sudo().browse(picking_id)
+	# 		purchase_id = picking_id.purchase_id
+	
+	# 		order = request.env['purchase.order'].sudo().browse(purchase_id)
+	# 		picking_id.write(vals)
+	# 	_logger.warning(order)
+	# 	self.order.write({
+	# 			'x_studio_status': 'delivered'
+	# 		})
+		
