@@ -2,23 +2,6 @@
 <odoo>
 
     <template id="rednux_portal" name="RednuxPortalMyHome" inherit_id="purchase.portal_my_home_purchase" priority="60">
-<!--
-
-                 <td><span t-esc="x_lieferanten.x_studio_ordered_count"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_confirmed_count"/></td>
-                                <td><span t-esc="x_lieferanten.	x_studio_ready_for_delivery_count"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_delivered_count"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
-                            </tr>
-
-                            <tr>
-                                <td>total value</td>
-                   
-              
-                      
-                                <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
-
--->
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-if="purchase_count_new" t-call="portal.portal_docs_entry">
                 <t t-set="title">new</t>
@@ -138,6 +121,8 @@
     </template>
 
     <template id="portal_my_purchase_order" name="Portal: My Purchase Order" inherit_id="purchase.portal_my_purchase_order" priority="99">
+
+
         <xpath expr="//div[hasclass('card-header')]" position="replace">
             <div class="card-header">
                 <div class="row">
@@ -183,8 +168,8 @@
                             <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                             <input type="hidden" id="order_id" name="order_id" t-att-value="order.id"/>
 
-                            <span t-set="shipmentdate" t-value="datetime.datetime.today() + datetime.timedelta(1)"/>
-                            <input id="shipmentdate" type="date" name="shipmentdate" t-att-value="shipmentdate.strftime('%d.%m.%Y')" min="28.12.2020" placeholder="DD.MM.YYYY" class="" required="true"/>
+                            <span t-set="shipmentdate" t-value="datetime.datetime.today() + datetime.timedelta(1)" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                            <input id="shipmentdate" type="date" name="shipmentdate" t-att-value="shipmentdate.strftime('%d.%m.%Y')" min="28.12.2020" placeholder="DD.MM.YYYY" class="" required="true" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
 
                             <button id="x_studio_shipmentdate" type="button">set date</button>
                         </form>
@@ -192,8 +177,6 @@
                     <div class="col-lg-6">
                         <strong class="d-block mb-1">From:</strong>
                         <address t-field="order.company_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
-
-
                     </div>
 
                 </div>
@@ -204,7 +187,8 @@
             <div class="card-footer">
 
 
-                    <form method="post" class="o_form_rednux_lieferanten"> <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <form method="post" class="o_form_rednux_lieferanten">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
                     <div class="row">
                         <div class="col-lg-3">
@@ -218,8 +202,8 @@
                     </div>
                     <span>shipment remarks</span>
                     <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks">
-           
-                   <t t-esc="order.x_studio_shipment_remarks"/>
+
+                        <t t-esc="order.x_studio_shipment_remarks"/>
                     </textarea>
                     <button type="button" t-att-value="order.id" id="remark_update" class="btn btn-link readonly">Update</button>
 
@@ -229,17 +213,13 @@
             </div>
 
         </xpath>
-
-
-        <xpath
-            expr="//input[@name='file']" position="replace">
-            <!-- -->
+        <xpath expr="//input[@name='file']" position="replace">
             <input name="file" type="file" t-if="order.x_studio_status == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'" class="form-control o_website_form_input"/>
         </xpath>
 
 
         <xpath expr="//button[hasclass('o_upload_btn')]" position="replace">
-            <button type="submit" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
+            <button type="submit" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
         </xpath>
 
 
@@ -249,39 +229,29 @@
             </button>
         </xpath>
 
-        <xpath expr="//input[@value='Validate']" position="replace">
-            <input t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status  == 'delivered' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja')" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
-
-
+        <xpath
+            expr="//input[@value='Validate']" position="replace">
+            <input t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
         </xpath>
 
         <xpath expr="//input[@name='carrier']" position="replace">
- <select  name="carrier" 		
- class="d-none editonly"
-required="true">
-        <t t-foreach="carrier" t-as="carrier" >
-          <option  t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
-     </t>
- </select>
-   
+            <select name="carrier" class="d-none editonly" required="true">
+                <t t-foreach="carrier" t-as="carrier">
+                    <option t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
+                </t>
+            </select>
 
 
         </xpath>
 
 
-        <xpath
-            expr="//button[@id='picking_submit']" position="replace">
-            <!--       <button id="picking_submit" type="submit" class="btn btn-link d-none editonly" t-if="i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'">
-                        -->
+        <xpath  expr="//button[@id='picking_submit']" position="replace">
             <button id="picking_submit" type="submit" class="btn btn-link d-none editonly">
                 Submit
             </button>
         </xpath>
 
     </template>
-
-
-   
 
 
 </odoo>

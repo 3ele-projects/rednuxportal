@@ -18,7 +18,7 @@ class rednuxResPartnerInherit(models.Model):
     def _get_x_lieferanten_record_id(self):
         lieferant_id = self.env['x_lieferanten'].search(
             [('x_studio_field_kontakt', '=', self.id)])   
-        self.lieferant_id = [lieferant_id]
+        self.lieferant_id = lieferant_id
 
 
 

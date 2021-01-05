@@ -2,8 +2,13 @@
 # from odoo import http
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
+from base64 import b64encode
+from dateutil.parser import parse
 
-import base64
+from odoo.http import request, route
+
+from odoo.addons.purchase.controllers import portal
+
 from collections import OrderedDict
 from dateutil.parser import parse
 from odoo import http
@@ -144,22 +149,14 @@ class CustomerPortal(CustomerPortal):
 			return request.redirect('/my')
 		values = self._purchase_order_get_page_view_values(order_sudo, access_token, **kw)
 		values['carrier'] = request.env['delivery.carrier'].sudo().search([])
-		_logger.warning(values['carrier'])
+
+		
 
 		if order_sudo.company_id:
 			values['res_company'] = order_sudo.company_id
 
 		return request.render("purchase.portal_my_purchase_order", values)
-	#	values = self._purchase_order_get_page_view_values(
-#			order_sudo, access_token, **kw)
-		
-#		lieferant = request.env['x_lieferanten'].search(
-#			[('x_studio_field_kontakt', '=', order_sudo.partner_id.id)])
 
-	#	if lieferant:
-#			values['x_lieferant'] = lieferant
-#		res = super().portal_my_purchase_order(order_id, access_token, **kw)
-#		return res
 
 	@http.route(route='/my/purchase/<int:order_id>/update_remarks', type='json', auth='user', methods=['post'], website=True)
 	def rednux_portal_my_purchase_update_remarks(self, order_id=None, x_studio_shipment_remarks=None, access_token=None, **kw):
@@ -199,6 +196,9 @@ class CustomerPortal(CustomerPortal):
 		if picking_id:
 			picking_id = request.env['stock.picking'].sudo().browse(picking_id)
 			picking_id.write(vals)
+		#	if (picking_id['carrier_id'] and picking_id['scheduled_date']):
+				
+		
 		
 				
 	@http.route(route='/my/purchase/<int:order_id>/update_status', type='json', auth='user', methods=['post'], website=True)
@@ -265,3 +265,32 @@ class CustomerPortal(CustomerPortal):
 	# 			'x_studio_status': 'delivered'
 	# 		})
 		
+	@route(route='/my/purchase/<int:order_id>/upload', type='http', auth='user', methods=['post'], website=True)
+	def portal_my_purchase_order_upload_bill(self, order_id=None, file=None, access_token=None, **kw):
+		if file:
+			purchase_order = request.env['purchase.order'].sudo().browse(order_id)
+			purchase_order.write({
+				'x_studio_upload_bill': b64encode(file.read()),
+				'x_studio_status' : 'billed'
+	
+				})
+
+		return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
+
+	@route(route='/my/picking/<int:picking_id>/validate', type='json', auth='user', website=True)
+	def validate_picking(self, picking_id=None, access_token=None, **kw):
+		data = {int(move_id): float(qty) for move_id, qty in kw.items()}
+		picking_id = request.env['stock.picking'].sudo().browse(picking_id)
+		
+		for move_id in picking_id.move_ids_without_package:
+			move_id.sudo().write({'quantity_done': data[move_id.id]})
+		if (picking_id.state == 'done'):
+			_logger.warning(picking_id.purchase_id.id)
+			
+
+			purchase_order = request.env['purchase.order'].sudo().browse(picking_id.purchase_id.id)
+			purchase_order.write({
+				'x_studio_status': 'delivered'
+	
+				})
+			

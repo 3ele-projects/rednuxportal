@@ -7,7 +7,8 @@
     <field name="arch" type="xml">
 
     <xpath expr="//page[@name='studio_page_2nBju']" position="inside">
-    <field name="lieferant_id"/>
+   
+    <field string="Lieferant" name="lieferant_id"/>
 
   </xpath>
     </field>
