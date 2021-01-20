@@ -159,9 +159,7 @@
                         <span t-field="order.date_approve" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
                         <br/>
                         <strong>Shipment Date:</strong>
-
-
-                        <span class="text-muted readonly" t-esc="order.x_studio_shipmentdate"/>
+                        <span class="text-muted" t-field="order.x_studio_shipmentdate" t-options="{'date_only': True}"/>
 
 
                         <form t-if="order.x_studio_status == 'new'" id="" method="post" class="o_form_rednux_lieferanten">
@@ -169,8 +167,9 @@
                             <input type="hidden" id="order_id" name="order_id" t-att-value="order.id"/>
 
                             <span t-set="shipmentdate" t-value="datetime.datetime.today() + datetime.timedelta(1)" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
-                            <input id="shipmentdate" type="date" name="shipmentdate" t-att-value="shipmentdate.strftime('%d.%m.%Y')" min="28.12.2020" placeholder="DD.MM.YYYY" class="" required="true" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                            <t t-set="date" t-value="datetime.datetime.today() + datetime.timedelta(1)"/>
 
+                            <input type="date" id="shipmentdate" name="shipmentdate" t-att-value="date.date()" min="2010-01-01" class="editonly" required="true"/>
                             <button id="x_studio_shipmentdate" type="button">set date</button>
                         </form>
                     </div>
@@ -201,10 +200,7 @@
 
                     </div>
                     <span>shipment remarks</span>
-                    <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks">
-
-                        <t t-esc="order.x_studio_shipment_remarks"/>
-                    </textarea>
+                    <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks"><t t-esc="order.x_studio_shipment_remarks"/></textarea>
                     <button type="button" t-att-value="order.id" id="remark_update" class="btn btn-link readonly">Update</button>
 
                 </form>
@@ -229,8 +225,7 @@
             </button>
         </xpath>
 
-        <xpath
-            expr="//input[@value='Validate']" position="replace">
+        <xpath expr="//input[@value='Validate']" position="replace">
             <input t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
         </xpath>
 
@@ -245,7 +240,7 @@
         </xpath>
 
 
-        <xpath  expr="//button[@id='picking_submit']" position="replace">
+        <xpath expr="//button[@id='picking_submit']" position="replace">
             <button id="picking_submit" type="submit" class="btn btn-link d-none editonly">
                 Submit
             </button>

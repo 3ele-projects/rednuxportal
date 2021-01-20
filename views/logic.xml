@@ -13,18 +13,17 @@ Wenn “purchase.order.x_studio_status='confirmed' & “x_studio_dropshipping_ar
 → dann ist die Schaltfläche “Update“ aktiv, Schaltfläche “Validate” ist nicht aktiv. 
 
 
-Über die Update Funktion muss der User die Felder ‘Carrier’ und ‘Tracking Ref.’ ausfüllen. Sind diese Felder ausgefüllt, wird die Schaltfläche “Validate” aktiv kann. Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='delivered' gesetzt. 
 
-
+/* done */
 Wenn “purchase.order.x_studio_status='confirmed'“ & “x_studio_dropshipping_art = ‘ja - ohne Versand’ ” ist, 
 → dann Schaltfläche “Validate” ist aktiv,  Schaltfläche “Update” ist deaktiviert . Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='ready_for_delivery' gesetzt. 
 
 
-
+/* done */
 Wenn “purchase.order.x_studio_status='ready_for_delivery' oder purchase.order.x_studio_status='delivered'“ ist, 
 → dann ist das Feld “Datei Auswahl” (für den Upload der Rechnung) aktiviert, Nach der Auswahl der Datei ist das Feld Upload aktiv. Hängt eine Rechnung an der Bestellung, ist der Status der Bestellung purchase.order.x_studio_status='billed' 
 
-
+/* done */
 
 Wenn der Status “purchase.order.x_studio_status='billed'“ ist, 
 → dann sind alle Felder deaktiviert
@@ -32,8 +31,11 @@ Wenn der Status “purchase.order.x_studio_status='billed'“ ist,
 Wenn der Status “purchase.order.x_studio_status='paid'“ ist, 
 → dann sind alle Felder deaktiviert
 
-t-if="1+1 and order.x_studio_status == 'confirmed' or "
 
 
-purchase.order.x_studio_status='new'
-not “Update“, “Validate” “Upload”
+
+FRAGEN:
+
+Über die Update Funktion muss der User die Felder ‘Carrier’ und ‘Tracking Ref.’ ausfüllen. Sind diese Felder ausgefüllt, wird die Schaltfläche “Validate” aktiv kann. Wird nach der Validate/Bestätigung kein weitere stock.picking angelegt bzw. alle stock.picking sind erledigt, wird der Status purchase.order.x_studio_status='delivered' gesetzt. 
+
+

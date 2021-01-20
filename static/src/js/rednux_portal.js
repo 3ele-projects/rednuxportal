@@ -214,10 +214,10 @@ odoo.define('rednuxportal.portal_my_purchase_order', function (require) {
 				route: url,params,
             }).then(function () {
                 $('#x_studio_shipment_remarks').val(params['x_studio_shipment_remarks']);
-			//	window.location.reload();
+				window.location.reload();
 			});
 		
-		//	this._validate_picking(picking_id, params);
+
         },
                 
         		/**
