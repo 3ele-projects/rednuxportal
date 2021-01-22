@@ -41,39 +41,42 @@
 
 
         <xpath expr="//div[hasclass('o_portal_my_home')]" position="after">
+
             <div class="row">
                 <div class="col-12">
-                    <table>
-                        <thead>
-                            <th></th>
-                            <th>new</th>
-                            <th>confirmed</th>
-                            <th>ready for delivery</th>
-                            <th>delivered</th>
-                            <th>billed</th>
-                        </thead>
-                        <tbody>
+                    <div class="table-responsive">
+                        <table class="table table-bordered mt-5">
+                            <thead>
+                                <th></th>
+                                <th>new</th>
+                                <th>confirmed</th>
+                                <th>ready for delivery</th>
+                                <th>delivered</th>
+                                <th>billed</th>
+                            </thead>
+                            <tbody>
 
-                            <tr>
-                                <td>total</td>
-                                <td><span t-esc="x_lieferanten.x_studio_ordered_count"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_confirmed_count"/></td>
-                                <td><span t-esc="x_lieferanten.	x_studio_ready_for_delivery_count"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_delivered_count"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
-                            </tr>
+                                <tr>
+                                    <td>total</td>
+                                    <td><span t-esc="x_lieferanten.x_studio_ordered_count"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_confirmed_count"/></td>
+                                    <td><span t-esc="x_lieferanten.	x_studio_ready_for_delivery_count"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_delivered_count"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
+                                </tr>
 
-                            <tr>
-                                <td>total value</td>
-                                <td><span t-esc="x_lieferanten.x_studio_ordered"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_confirmed"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_delivered"/></td>
-                                <td><span t-esc="x_lieferanten.x_studio_billed"/></td>
-                            </tr>
+                                <tr>
+                                    <td>total value</td>
+                                    <td><span t-esc="x_lieferanten.x_studio_ordered"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_confirmed"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_delivered"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_billed"/></td>
+                                </tr>
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </xpath>
@@ -190,12 +193,23 @@
                     <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
 
                     <div class="row">
-                        <div class="col-lg-3">
-                            <span>delayed shipmentdate:
-                            </span>
-                        </div>
-                        <div class="col-lg-3">
-                            <span class="ml-1" t-field="order.x_studio_delayed_shipment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                        <div class="col-lg-9 input-group">
+                            <form t-if="order.x_studio_status  == 'confirmed'" method="post" class="o_form_rednux_lieferanten">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" id="order_id" name="order_id" t-att-value="order.id"/>
+                                <t t-set="date" t-value="datetime.datetime.today() + datetime.timedelta(1)"/>
+
+                                <span>delayed shipmentdate:
+                                </span>
+                                <span class="text-muted p-" t-field="order.x_studio_delayed_shipment_date" t-options="{'date_only': True}"/>
+
+                                <span t-set="shipmentdate" t-value="datetime.datetime.today() + datetime.timedelta(1)" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                                <input type="date" id="delayed_shipmentdate" name="delayed_shipmentdate" t-att-value="date.date()" min="2010-01-01" class="editonly" required="true"/>
+                                <button id="x_studio_delayed_shipmentdate" type="button">set date</button>
+                            </form>
+
+
+                            <!--  <span class="ml-1" t-field="order.x_studio_delayed_shipment_date" t-options="{&quot;widget&quot;: &quot;date&quot;}"/>  -->
                         </div>
 
                     </div>
@@ -210,7 +224,7 @@
 
         </xpath>
         <xpath expr="//input[@name='file']" position="replace">
-            <input name="file" type="file" t-if="order.x_studio_status == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'" class="form-control o_website_form_input"/>
+            <input name="file" type="file" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" class="form-control o_website_form_input"/>
         </xpath>
 
 
@@ -220,33 +234,43 @@
 
 
         <xpath expr="//button[@id='picking_update']" position="replace">
-            <button id="picking_update" t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned'] and order.x_studio_status  == 'confirmed')" type="button" class="btn btn-link readonly">
+        <t t-if="not i.carrier_id and  not i.carrier_tracking_ref">
+            <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'">
+
+            <button id="picking_update" t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned']  and order.x_studio_status  == 'confirmed')" type="button" class="btn btn-link readonly">
                 Update
             </button>
-        </xpath>
+        </t>
+     </t>
+    </xpath>
 
-        <xpath expr="//input[@value='Validate']" position="replace">
-            <input t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
-        </xpath>
+    <xpath expr="//input[@value='Validate']" position="replace">
+        <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'">
 
-        <xpath expr="//input[@name='carrier']" position="replace">
-            <select name="carrier" class="d-none editonly" required="true">
-                <t t-foreach="carrier" t-as="carrier">
-                    <option t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
-                </t>
-            </select>
+        <input t-if="order.x_studio_status  == 'confirmed' and i.carrier_id and i.carrier_tracking_ref and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
+    </t>
+</xpath>
 
-
-        </xpath>
-
-
-        <xpath expr="//button[@id='picking_submit']" position="replace">
-            <button id="picking_submit" type="submit" class="btn btn-link d-none editonly">
-                Submit
-            </button>
-        </xpath>
-
-    </template>
+<xpath expr="//input[@name='carrier']" position="replace">
+    <select name="carrier" class="d-none editonly" required="true">
+        <t t-foreach="carrier" t-as="carrier">
+            <option t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
+        </t>
+    </select>
 
 
-</odoo>
+</xpath>
+
+
+<xpath expr="//button[@id='picking_submit']" position="replace">
+    <button id="picking_submit" type="submit" class="btn btn-link d-none editonly">
+        Submit
+    </button>
+</xpath></template></odoo>
+
+
+<!-- 
+
+			<div t-foreach="order.picking_ids.filtered(lambda picking: picking.picking_type_id.code != 'internal')" t-as="i" class="container">
+
+-->

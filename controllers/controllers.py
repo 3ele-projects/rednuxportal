@@ -43,11 +43,11 @@ class CustomerPortal(CustomerPortal):
 			[('x_studio_status', '=', 'paid')])
 		values['x_lieferanten'] = request.env['x_lieferanten'].search(
 			[('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])
-		_logger.warning(request.env.user.partner_id['lieferant_id'])
+		
 		if (request.env.user.partner_id.x_studio_kontakt_art):
 			values['invoice_count'] = 0
 			values['purchase_count'] = 0
-			values[''] = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])		
+			myvalue = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])		
 			
 		return values
 
@@ -220,6 +220,20 @@ class CustomerPortal(CustomerPortal):
 					picking.write({
 						'scheduled_date': shipmentdate
 					})
+
+	@http.route(route='/my/purchase/<int:order_id>/update_delayed_date', type='json', auth='user', methods=['post'], website=True)
+	def rednux_portal_my_purchase_update_delayed_date(self, order_id=None, delayed_shipmentdate=None, access_token=None, **kw):
+		if delayed_shipmentdate:
+			purchase_order = request.env['purchase.order'].sudo().browse(
+				order_id)
+
+			try:
+				purchase_order.write({
+					'x_studio_delayed_shipment_date': delayed_shipmentdate
+
+				})
+			except Exception as e:
+				_logger.info(e)
 
 		
 	@route(route='/my/purchase/<int:order_id>/upload', type='http', auth='user', methods=['post'], website=True)
