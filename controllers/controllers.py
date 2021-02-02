@@ -255,13 +255,21 @@ class CustomerPortal(CustomerPortal):
 		
 		for move_id in picking_id.move_ids_without_package:
 			move_id.sudo().write({'quantity_done': data[move_id.id]})
-		if (picking_id.state == 'done'):
-
-			
-
+		
+		if (picking_id.state in ['draft', 'waiting', 'confirmed', 'assigned']):
 			purchase_order = request.env['purchase.order'].sudo().browse(picking_id.purchase_id.id)
-			purchase_order.write({
-				'x_studio_status': 'delivered'
-	
-				})
+
+			if purchase_order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja':
+				purchase_order.write({
+					'x_studio_status': 'delivered'		
+					})
+
+			if purchase_order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand':
+				purchase_order.write({
+					'x_studio_status': 'ready for delivery'
+					})
+
+				
+
+
 			
