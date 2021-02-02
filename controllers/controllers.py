@@ -43,11 +43,11 @@ class CustomerPortal(CustomerPortal):
 			[('x_studio_status', '=', 'paid')])
 		values['x_lieferanten'] = request.env['x_lieferanten'].search(
 			[('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])
-		_logger.warning(request.env.user.partner_id['lieferant_id'])
+		
 		if (request.env.user.partner_id.x_studio_kontakt_art):
 			values['invoice_count'] = 0
 			values['purchase_count'] = 0
-			values[''] = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])		
+			myvalue = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])		
 			
 		return values
 
@@ -196,7 +196,8 @@ class CustomerPortal(CustomerPortal):
 		if picking_id:
 			picking_id = request.env['stock.picking'].sudo().browse(picking_id)
 			picking_id.write(vals)
-		#	if (picking_id['carrier_id'] and picking_id['scheduled_date']):
+
+
 				
 		
 		
@@ -216,54 +217,24 @@ class CustomerPortal(CustomerPortal):
 			picking_ids = purchase_order.picking_ids
 
 			for picking in picking_ids:
-				try:
 					picking.write({
 						'scheduled_date': shipmentdate
 					})
-				except:
-					pass
-		#return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
 
+	@http.route(route='/my/purchase/<int:order_id>/update_delayed_date', type='json', auth='user', methods=['post'], website=True)
+	def rednux_portal_my_purchase_update_delayed_date(self, order_id=None, delayed_shipmentdate=None, access_token=None, **kw):
+		if delayed_shipmentdate:
+			purchase_order = request.env['purchase.order'].sudo().browse(
+				order_id)
 
-	# @route(route='/my/picking/<int:picking_id>', type='json', auth='user', website=True)
-	# def update_picking_info(self, picking_id=None, access_token=None, **kw):
-	# 	vals = {}
-	# 	carrier_tracking_ref = kw.get('tracking_ref')
-	# 	if carrier_tracking_ref:
-	# 		vals['carrier_tracking_ref'] = carrier_tracking_ref
+			try:
+				purchase_order.write({
+					'x_studio_delayed_shipment_date': delayed_shipmentdate
 
-	# 	carrier_id = False
-	# 	carrier_name = kw.get('carrier')
-	# 	if carrier_name:
-	# 		carrier_id = request.env['delivery.carrier'].sudo().search(
-	# 			[('name', '=', carrier_name)],
-	# 			limit=1
-	# 		)
-	# 		if not carrier_id:
-	# 			product_id = request.env['product.template'].sudo().create({'name': carrier_name})
-	# 			carrier_id = request.env['delivery.carrier'].sudo().create(
-	# 				{
-	# 					'name'      : carrier_name,
-	# 					'product_id': product_id.id,
-	# 				}
-	# 			)
-	# 	if carrier_id:
-	# 		vals['carrier_id'] = carrier_id.id
+				})
+			except Exception as e:
+				_logger.info(e)
 
-	# 	date = kw.get('date')
-	# 	if date:
-	# 		vals['scheduled_date'] = parse(date)
-
-	# 	if picking_id:
-	# 		picking_id = request.env['stock.picking'].sudo().browse(picking_id)
-	# 		purchase_id = picking_id.purchase_id
-	
-	# 		order = request.env['purchase.order'].sudo().browse(purchase_id)
-	# 		picking_id.write(vals)
-	# 	_logger.warning(order)
-	# 	self.order.write({
-	# 			'x_studio_status': 'delivered'
-	# 		})
 		
 	@route(route='/my/purchase/<int:order_id>/upload', type='http', auth='user', methods=['post'], website=True)
 	def portal_my_purchase_order_upload_bill(self, order_id=None, file=None, access_token=None, **kw):
@@ -285,7 +256,7 @@ class CustomerPortal(CustomerPortal):
 		for move_id in picking_id.move_ids_without_package:
 			move_id.sudo().write({'quantity_done': data[move_id.id]})
 		if (picking_id.state == 'done'):
-			_logger.warning(picking_id.purchase_id.id)
+
 			
 
 			purchase_order = request.env['purchase.order'].sudo().browse(picking_id.purchase_id.id)

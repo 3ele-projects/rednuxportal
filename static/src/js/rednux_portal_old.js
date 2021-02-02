@@ -108,7 +108,6 @@ odoo.define('rednuxportal.portal_my_purchase_order', function (require) {
 			'click button#picking_submit'  : '_on_submit',
 			'click button#picking_validate': '_on_validate',
 			'click #x_studio_shipmentdate': '_shipmentdate_update',
-			'click #x_studio_delayed_shipmentdate': '_delayed_shipmentdate_update',
 			'click #remark_update': '_remark_update',
 
 			//'click .o_purchase_stock_picking button#picking_submit'  : '_on_submit',
@@ -246,27 +245,6 @@ odoo.define('rednuxportal.portal_my_purchase_order', function (require) {
 		//	this._validate_picking(picking_id, params);
 		},
 
-        _delayed_shipmentdate_update(e) {
-        
-            let x_studio_shipmentdate = $('#delayed_shipmentdate').val();
-
-            let params = {}
-            params['delayed_shipmentdate'] = x_studio_shipmentdate
-            params['order_id'] = $('#order_id').val();
-
-			console.log(e);
-            var url = '/my/purchase/'+params['order_id']+'/update_delayed_date';
-          
-
-            return this._rpc({
-				route: url,params,
-            }).then(function () {
-              
-				window.location.reload();
-			});
-		
-		//	this._validate_picking(picking_id, params);
-		},
 
 
 
