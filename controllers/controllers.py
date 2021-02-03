@@ -264,4 +264,4 @@ class CustomerPortal(CustomerPortal):
 				'x_studio_status': 'delivered'
 	
 				})
-			
+			picking_id.with_context(create_backorder=True).button_validate()
