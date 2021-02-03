@@ -257,12 +257,14 @@ class CustomerPortal(CustomerPortal):
 			move_id.sudo().write({'quantity_done': data[move_id.id]})
 		picking_id.with_context(create_backorder=True).button_validate()
 		if (picking_id.state == 'done'):
-
-			
-
 			purchase_order = request.env['purchase.order'].sudo().browse(picking_id.purchase_id.id)
-			purchase_order.write({
-				'x_studio_status': 'delivered'
-	
-				})
+			ids = []
+			for picking_id in purchase_order.picking_ids:
+				if (picking_id.state == 'done'):
+					ids.append(picking_id)
+			if (len(ids) == purchase_order.picking_count):
+				purchase_order.write({
+					'x_studio_status': 'delivered'
+		
+					})
 		
