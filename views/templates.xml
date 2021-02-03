@@ -20,13 +20,13 @@
             <t t-if="x_lieferanten.x_studio_ready_for_delivery" t-call="portal.portal_docs_entry">
                 <t t-set="title">ready for delivery</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=ready for delivery'"/>
-                <t t-set="count" t-value="x_lieferanten.purchase_count_ready_for_delivery"/>
+                <t t-set="count" t-value="x_lieferanten.x_studio_ready_for_delivery_count"/>
             </t>
 
             <t t-if="x_lieferanten.x_studio_delivered" t-call="portal.portal_docs_entry">
                 <t t-set="title">delivered</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=delivered'"/>
-                <t t-set="count" t-value="x_lieferanten.purchase_count_delivered"/>
+                <t t-set="count" t-value="x_lieferanten.x_studio_delivered_count"/>
             </t>
             <t t-if="x_lieferanten.x_studio_billed_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">billed
