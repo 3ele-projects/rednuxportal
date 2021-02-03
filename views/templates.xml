@@ -148,7 +148,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <strong class="d-block mb-1">To:</strong>
-                        <address t-field="order.dest_adresss_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                        <address t-field="order.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
 
                         <br/>
                         <div t-att-class="'d-inline' if order.date_planned else 'd-none'">
