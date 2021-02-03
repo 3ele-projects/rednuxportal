@@ -8,21 +8,17 @@
                 <t t-set="url" t-value="'/my/purchase?filterby=new'"/>
                 <t t-set="count" t-value="purchase_count_new"/>
             </t>
-
-
             <t t-if="x_lieferanten.x_studio_confirmed" t-call="portal.portal_docs_entry">
                 <t t-set="title">confirmed
                 </t>
                 <t t-set="url" t-value="'/my/purchase?filterby=confirmed'"/>
                 <t t-set="count" t-value="x_lieferanten.x_studio_confirmed_count"/>
             </t>
-
             <t t-if="x_lieferanten.x_studio_ready_for_delivery" t-call="portal.portal_docs_entry">
                 <t t-set="title">ready for delivery</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=ready for delivery'"/>
                 <t t-set="count" t-value="x_lieferanten.x_studio_ready_for_delivery_count"/>
             </t>
-
             <t t-if="x_lieferanten.x_studio_delivered" t-call="portal.portal_docs_entry">
                 <t t-set="title">delivered</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=delivered'"/>
@@ -34,14 +30,11 @@
                 <t t-set="url" t-value="'/my/purchase?filterby=billed'"/>
                 <t t-set="count" t-value="x_lieferanten.x_studio_billed_count"/>
             </t>
-
             <t t-if="purchase_count_paid" t-call="portal.portal_docs_entry">
                 <t t-set="title">paid</t>
                 <t t-set="url" t-value="'/my/purchase?filterby=paid'"/>
                 <t t-set="count" t-value="purchase_count_paid"/>
-
             </t>
-
         </xpath>
 
 
@@ -155,7 +148,7 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <strong class="d-block mb-1">To:</strong>
-                        <address t-field="order.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                        <address t-field="order.dest_address_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
 
                         <br/>
                         <div t-att-class="'d-inline' if order.date_planned else 'd-none'">
