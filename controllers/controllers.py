@@ -44,7 +44,7 @@ class CustomerPortal(CustomerPortal):
 		values['x_lieferanten'] = request.env['x_lieferanten'].search(
 			[('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])
 		
-		if (request.env.user.partner_id.x_studio_kontakt_art):
+		if (request.env.user.partner_id.supplier_rank > 0):
 			values['invoice_count'] = 0
 			values['purchase_count'] = 0
 			myvalue = request.env['x_lieferanten'].search([('x_studio_field_kontakt', '=', request.env.user.partner_id.id)])		
