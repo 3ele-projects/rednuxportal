@@ -255,6 +255,7 @@ class CustomerPortal(CustomerPortal):
 		
 		for move_id in picking_id.move_ids_without_package:
 			move_id.sudo().write({'quantity_done': data[move_id.id]})
+		picking_id.with_context(create_backorder=True).button_validate()
 		if (picking_id.state == 'done'):
 
 			
@@ -264,4 +265,4 @@ class CustomerPortal(CustomerPortal):
 				'x_studio_status': 'delivered'
 	
 				})
-		picking_id.with_context(create_backorder=True).button_validate()
+		
