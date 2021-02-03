@@ -65,7 +65,7 @@
                                     <td>total</td>
                                     <td><span t-esc="x_lieferanten.x_studio_ordered_count"/></td>
                                     <td><span t-esc="x_lieferanten.x_studio_confirmed_count"/></td>
-                                    <td><span t-esc="x_lieferanten.	x_studio_ready_for_delivery_count"/></td>
+                                    <td><span t-esc="x_lieferanten.x_studio_ready_for_delivery_count"/></td>
                                     <td><span t-esc="x_lieferanten.x_studio_delivered_count"/></td>
                                     <td><span t-esc="x_lieferanten.x_studio_billed_count"/></td>
                                 </tr>
