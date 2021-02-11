@@ -236,29 +236,28 @@ class CustomerPortal(CustomerPortal):
 				_logger.info(e)
 
 		
-	@route(route='/my/purchase/<int:order_id>/upload', type='http', auth='user', methods=['post'], website=True)
-	def portal_my_purchase_order_upload_bill(self, order_id=None, file=None, access_token=None, **kw):
-		if file:
-			purchase_order = request.env['purchase.order'].sudo().browse(order_id)
-			purchase_order.invoice_ids.unlink()
-			invoice = request.env['account.move'].sudo().create(
-				{
-					'type': 'in_invoice',
-					'company_id': purchase_order.company_id.id,
-					'partner_id': purchase_order.partner_id.id,
-					'invoice_origin': purchase_order.name,
-					'ref': purchase_order.partner_ref,
-				}
-			)
-			invoice.purchase_id = purchase_order.id
-			invoice.with_context(portal=True)._onchange_purchase_auto_complete()
-			invoice._onchange_partner_id()
-			purchase_order.write({
-				'x_studio_upload_bill': b64encode(file.read()),
-				'x_studio_status' : 'billed'
-				})
-
-		return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
+	#@route(route='/my/purchase/<int:order_id>/upload', type='http', auth='user', methods=['post'], website=True)
+	#def portal_my_purchase_order_upload_bill(self, order_id=None, file=None, access_token=None, **kw):
+	#	if file:
+	#		purchase_order = request.env['purchase.order'].sudo().browse(order_id)
+	#		purchase_order.invoice_ids.unlink()
+	#		invoice = request.env['account.move'].sudo().create(
+	#			{
+	#				'type': 'in_invoice',
+	#				'company_id': purchase_order.company_id.id,
+	#				'partner_id': purchase_order.partner_id.id,
+	#				'invoice_origin': purchase_order.name,
+	#				'ref': purchase_order.partner_ref,
+	#			}
+	#		)
+	#		invoice.purchase_id = purchase_order.id
+	#		invoice.with_context(portal=True)._onchange_purchase_auto_complete()
+	#		invoice._onchange_partner_id()
+	#		purchase_order.write({
+	#			'x_studio_upload_bill': b64encode(file.read()),
+	#			'x_studio_status' : 'billed'
+	#			})
+	#	return self.portal_my_purchase_order(order_id=order_id, access_token=access_token)
 
 	@route(route='/my/picking/<int:picking_id>/validate', type='json', auth='user', website=True)
 	def validate_picking(self, picking_id=None, access_token=None, **kw):
