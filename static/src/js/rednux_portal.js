@@ -204,7 +204,7 @@ odoo.define('rednuxportal.portal_my_purchase_order', function (require) {
 		 */
 		_remark_update (e) {
             let x_studio_shipment_remarks = $('#x_studio_shipment_remarks').val();
-			alert(e)
+			
 			
 			let params = {}
 
