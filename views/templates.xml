@@ -186,10 +186,6 @@
         <xpath expr="//div[hasclass('card-body')]" position="after">
             <div class="card-footer">
 
-
-                <form method="post" class="o_form_rednux_lieferanten">
-                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-
                     <div class="row">
                         <div class="col-lg-9 input-group">
                             <form t-if="order.x_studio_status  == 'confirmed'" method="post" class="o_form_rednux_lieferanten">
@@ -211,9 +207,13 @@
                         </div>
 
                     </div>
+
+                <form method="post" class="o_form_rednux_lieferanten">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
                     <span>shipment remarks</span>
                     <textarea rows="4" id="x_studio_shipment_remarks" name="x_studio_shipment_remarks" class="form-control o_website_form_input" t-att-value="order.x_studio_shipment_remarks"><t t-esc="order.x_studio_shipment_remarks"/></textarea>
-                    <button type="button" t-att-value="order.id" id="remark_update" class="btn btn-link readonly">Update</button>
+                    <button type="button" t-att-value="order.id" id="remark_update" class="btn btn-link">Update</button>
 
                 </form>
 
@@ -234,7 +234,6 @@
         <xpath expr="//button[@id='picking_update']" position="replace">
         <t t-if="not i.carrier_id and  not i.carrier_tracking_ref">
             <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'">
-
             <button id="picking_update" t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned']  and order.x_studio_status  == 'confirmed')" type="button" class="btn btn-link readonly">
                 Update
             </button>
