@@ -232,16 +232,16 @@
 
         <xpath expr="//button[@id='picking_update']" position="replace">
         <t t-if="not i.carrier_id and  not i.carrier_tracking_ref">
-            <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'">
-            <button id="picking_update" t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned']  and order.x_studio_status  == 'confirmed')" type="button" class="btn btn-link readonly">
-                Update
-            </button>
+            <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'">
+                <button id="picking_update" t-if="(i.state in ['draft', 'waiting', 'confirmed', 'assigned']  and order.x_studio_status  == 'confirmed')" type="button" class="btn btn-link readonly">
+                    Update
+                </button>
+            </t>
         </t>
-     </t>
     </xpath>
 
     <xpath expr="//input[@value='Validate']" position="replace">
-        <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'">
+        <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja'">
 
         <input t-if="order.x_studio_status  == 'confirmed' and i.carrier_id and i.carrier_tracking_ref and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'" type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
     </t>
