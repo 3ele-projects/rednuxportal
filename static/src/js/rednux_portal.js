@@ -204,10 +204,7 @@ odoo.define('rednuxportal.portal_my_purchase_order', function (require) {
 		 */
 		_remark_update (e) {
             let x_studio_shipment_remarks = $('#x_studio_shipment_remarks').val();
-			
-			
 			let params = {}
-
             params['x_studio_shipment_remarks'] = x_studio_shipment_remarks
 			params['order_id'] = $('#remark_update').val();
             var url = '/my/purchase/'+params['order_id']+'/update_remarks';

@@ -185,7 +185,6 @@
 
         <xpath expr="//div[hasclass('card-body')]" position="after">
             <div class="card-footer">
-
                     <div class="row">
                         <div class="col-lg-9 input-group">
                             <form t-if="order.x_studio_status  == 'confirmed'" method="post" class="o_form_rednux_lieferanten">
