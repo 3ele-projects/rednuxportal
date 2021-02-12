@@ -1,34 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@AlexWagner-Rednux 
-3ele-projects
-/
-rednuxportal
-1
-0
-1
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-rednuxportal/views/templates.xml
-
-wagnera Update-Button nur bei echten Dropshippern aktiv
-Latest commit 3e73ee2 12 hours ago
- History
- 1 contributor
-Executable File  272 lines (224 sloc)  13.7 KB
-  
 <?xml version="1.0"?>
 <odoo>
 
