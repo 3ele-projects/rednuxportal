@@ -1,3 +1,34 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@AlexWagner-Rednux 
+3ele-projects
+/
+rednuxportal
+1
+0
+1
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+rednuxportal/views/templates.xml
+
+wagnera Update-Button nur bei echten Dropshippern aktiv
+Latest commit 3e73ee2 12 hours ago
+ History
+ 1 contributor
+Executable File  272 lines (224 sloc)  13.7 KB
+  
 <?xml version="1.0"?>
 <odoo>
 
@@ -247,15 +278,13 @@
             </t>
         </xpath>
 
-<xpath expr="//input[@name='carrier']" position="replace">
-    <select name="carrier" class="d-none editonly" required="true">
-        <t t-foreach="carrier" t-as="carrier">
-            <option t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
-        </t>
-    </select>
-
-
-</xpath>
+        <xpath expr="//input[@name='carrier']" position="replace">
+            <select name="carrier" class="d-none editonly" required="true">
+                <t t-foreach="carrier" t-as="carrier">
+                    <option t-att-value="carrier.name"><t t-esc="carrier.name"/></option>
+                </t>
+            </select>
+        </xpath>
 
 
 <xpath expr="//button[@id='picking_submit']" position="replace">
@@ -266,7 +295,5 @@
 
 
 <!-- 
-
 			<div t-foreach="order.picking_ids.filtered(lambda picking: picking.picking_type_id.code != 'internal')" t-as="i" class="container">
-
 -->
