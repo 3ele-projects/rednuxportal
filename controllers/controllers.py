@@ -34,9 +34,9 @@ class CustomerPortal(CustomerPortal):
 		values['purchase_count_confirmed'] = request.env['purchase.order'].search_count(
 			[('x_studio_status', '=', 'confirmed')])
 		values['purchase_count_ready_for_pick_up'] = request.env['purchase.order'].search_count(
-			[('x_studio_status', '=', 'ready for pick up')])
+			[('x_studio_status', '=', 'ready for delivery')])
 		values['purchase_count_delivered'] = request.env['purchase.order'].search_count(
-			[('x_studio_status', '=', 'picked up')])
+			[('x_studio_status', '=', 'delivered')])
 		values['purchase_count_billed'] = request.env['purchase.order'].search_count(
 			[('x_studio_status', '=', 'billed')])
 		values['purchase_count_paid'] = request.env['purchase.order'].search_count(
@@ -75,13 +75,13 @@ class CustomerPortal(CustomerPortal):
 		order = searchbar_sortings[sortby]['order']
 
 		searchbar_filters = {
-			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'delivered', 'confirmed', 'new'])]},
+			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'delivered', 'ready for delivery', 'confirmed','new'])]},
 			'new': {'label': _('new'), 'domain': [('x_studio_status', '=', 'new')]},
 			'paid': {'label': _('paid'), 'domain': [('x_studio_status', '=', ['paid'])]},
 			'billed': {'label': _('billed'), 'domain': [('x_studio_status', '=', 'billed')]},
-			'delivered': {'label': _('delivered'), 'domain': [('x_studio_status', '=', 'picked up')]},
+			'delivered': {'label': _('picked up'), 'domain': [('x_studio_status', '=', 'delivered')]},
 			'confirmed': {'label': _('confirmed'), 'domain': [('x_studio_status', '=', 'confirmed')]},
-			'ready_for_delivery': {'label': _('ready for delivery'), 'domain': [('x_studio_status', '=', 'ready for pick up')]},
+			'ready_for_delivery': {'label': _('ready for pick up'), 'domain': [('x_studio_status', '=', 'ready for delivery')]},
 		}
 	# default filter by value
 		if not filterby:
@@ -210,7 +210,7 @@ class CustomerPortal(CustomerPortal):
 			try:
 				purchase_order.write({
 					'x_studio_shipmentdate': shipmentdate,
-					'x_studio_status': 'picked up'
+					'x_studio_status': 'delivered'
 				})
 			except:
 				pass
@@ -276,6 +276,5 @@ class CustomerPortal(CustomerPortal):
 			if (len(ids) == int(purchase_order.picking_count)):
 				purchase_order.write({
 					'x_studio_status': 'delivered'
-
 					})
 		
