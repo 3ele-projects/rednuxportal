@@ -79,9 +79,9 @@ class CustomerPortal(CustomerPortal):
 			'new': {'label': _('new'), 'domain': [('x_studio_status', '=', 'new')]},
 			'paid': {'label': _('paid'), 'domain': [('x_studio_status', '=', ['paid'])]},
 			'billed': {'label': _('billed'), 'domain': [('x_studio_status', '=', 'billed')]},
-			'delivered': {'label': _('picked up'), 'domain': [('x_studio_status', '=', 'picked up')]},
+			'picked_up': {'label': _('picked up'), 'domain': [('x_studio_status', '=', 'picked up')]},
 			'confirmed': {'label': _('confirmed'), 'domain': [('x_studio_status', '=', 'confirmed')]},
-			'ready_for_delivery': {'label': _('ready for pick up'), 'domain': [('x_studio_status', '=', 'ready for pick up')]},
+			'ready_for_pick_up': {'label': _('ready for pick up'), 'domain': [('x_studio_status', '=', 'ready for pick up')]},
 		}
 	# default filter by value
 		if not filterby:
