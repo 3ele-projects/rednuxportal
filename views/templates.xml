@@ -221,12 +221,12 @@
 
         </xpath>
         <xpath expr="//input[@name='file']" position="replace">
-            <input name="file" type="file" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" class="form-control o_website_form_input"/>
+            <input name="file" type="file" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'picked up')" class="form-control o_website_form_input"/>
         </xpath>
 
 
         <xpath expr="//button[hasclass('o_upload_btn')]" position="replace">
-            <button type="submit" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
+            <button type="submit" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'picked up')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
         </xpath>
 
 
@@ -239,7 +239,7 @@
         </xpath>
 
         <xpath expr="//input[@value='Validate']" position="replace">
-            <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja' and and i.carrier_id and i.carrier_tracking_ref">
+            <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja' and i.carrier_id and i.carrier_tracking_ref">
                 <input type="button" class="btn btn-link readonly" value="Validate" data-toggle="modal" data-target="#picking_box"/>
             </t>
             <t t-if="order.x_studio_status  == 'confirmed' and order.partner_id.lieferant_id.x_studio_dropshipping_art == 'ja - ohne Versand'">
