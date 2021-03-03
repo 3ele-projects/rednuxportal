@@ -15,13 +15,13 @@
                 <t t-set="count" t-value="x_lieferanten.x_studio_confirmed_count"/>
             </t>
             <t t-if="x_lieferanten.x_studio_ready_for_delivery" t-call="portal.portal_docs_entry">
-                <t t-set="title">ready for pick up</t>
-                <t t-set="url" t-value="'/my/purchase?filterby=ready for pick up'"/>
+                <t t-set="title">ready for delivery</t>
+                <t t-set="url" t-value="'/my/purchase?filterby=ready for delivery'"/>
                 <t t-set="count" t-value="x_lieferanten.x_studio_ready_for_delivery_count"/>
             </t>
             <t t-if="x_lieferanten.x_studio_delivered" t-call="portal.portal_docs_entry">
-                <t t-set="title">picked up</t>
-                <t t-set="url" t-value="'/my/purchase?filterby=picked up'"/>
+                <t t-set="title">delivered</t>
+                <t t-set="url" t-value="'/my/purchase?filterby=delivered'"/>
                 <t t-set="count" t-value="x_lieferanten.x_studio_delivered_count"/>
             </t>
             <t t-if="x_lieferanten.x_studio_billed_count" t-call="portal.portal_docs_entry">
@@ -48,8 +48,8 @@
                                 <th></th>
                                 <th>new</th>
                                 <th>confirmed</th>
-                                <th>ready for pick up</th>
-                                <th>picked up</th>
+                                <th>ready for delivery</th>
+                                <th>delivered</th>
                                 <th>billed</th>
                             </thead>
                             <tbody>
@@ -221,12 +221,12 @@
 
         </xpath>
         <xpath expr="//input[@name='file']" position="replace">
-            <input name="file" type="file" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'picked up')" class="form-control o_website_form_input"/>
+            <input name="file" type="file" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" class="form-control o_website_form_input"/>
         </xpath>
 
 
         <xpath expr="//button[hasclass('o_upload_btn')]" position="replace">
-            <button type="submit" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'picked up')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
+            <button type="submit" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
         </xpath>
 
 
