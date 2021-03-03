@@ -75,13 +75,13 @@ class CustomerPortal(CustomerPortal):
 		order = searchbar_sortings[sortby]['order']
 
 		searchbar_filters = {
-			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'picked up', 'ready for pick up', 'confirmed', 'new'])]},
+			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'delivered', 'confirmed', 'new'])]},
 			'new': {'label': _('new'), 'domain': [('x_studio_status', '=', 'new')]},
 			'paid': {'label': _('paid'), 'domain': [('x_studio_status', '=', ['paid'])]},
 			'billed': {'label': _('billed'), 'domain': [('x_studio_status', '=', 'billed')]},
-			'picked_up': {'label': _('picked up'), 'domain': [('x_studio_status', '=', 'picked up')]},
+			'delivered': {'label': _('delivered'), 'domain': [('x_studio_status', '=', 'picked up')]},
 			'confirmed': {'label': _('confirmed'), 'domain': [('x_studio_status', '=', 'confirmed')]},
-			'ready_for_pick_up': {'label': _('ready for pick up'), 'domain': [('x_studio_status', '=', 'ready for pick up')]},
+			'ready_for_delivery': {'label': _('ready for delivery'), 'domain': [('x_studio_status', '=', 'ready for pick up')]},
 		}
 	# default filter by value
 		if not filterby:
@@ -210,7 +210,7 @@ class CustomerPortal(CustomerPortal):
 			try:
 				purchase_order.write({
 					'x_studio_shipmentdate': shipmentdate,
-					'x_studio_status': 'confirmed'
+					'x_studio_status': 'picked up'
 				})
 			except:
 				pass
@@ -275,6 +275,7 @@ class CustomerPortal(CustomerPortal):
 					ids.append(picking_id)
 			if (len(ids) == int(purchase_order.picking_count)):
 				purchase_order.write({
-					'x_studio_status': 'picked up'
+					'x_studio_status': 'delivered'
+
 					})
 		

@@ -16,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/14.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Purchase',
-    'version': '1.0.4711',
+    'version': '0.0.99',
 
     # any module necessary for this one to work correctly
 	'depends' : ['base','website','purchase','vendor_purchase_order','sale', 'delivery', 'purchase_stock', 'web_studio'],
