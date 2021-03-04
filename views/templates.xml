@@ -135,7 +135,15 @@
                                 Purchase Order
                             </t>
                             <span t-esc="order.name"/>
-                            <span class="float-right" t-esc="order.x_studio_status"/>
+                             <t t-if="order.x_studio_status in ['delivered']">
+                                <span class="float-right">picked up</span>
+                            </t>
+                            <t t-else-if="order.x_studio_status in ['ready for delivery']">
+                                <span class="float-right">ready for pick up</span>
+                            </t>
+                            <t t-else="1">
+                                <span class="float-right" t-esc="order.x_studio_status"/>
+                            </t>
                         </h4>
                     </div>
                 </div>
