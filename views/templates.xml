@@ -138,10 +138,10 @@
                              <t t-if="order.x_studio_status in ['delivered']">
                                 <span class="float-right">picked up</span>
                             </t>
-                            <t t-else-if="order.x_studio_status in ['ready for delivery']">
+                            <t t-elif="order.x_studio_status in ['ready for delivery']">
                                 <span class="float-right">ready for pick up</span>
                             </t>
-                            <t t-else="1">
+                            <t t-else="">
                                 <span class="float-right" t-esc="order.x_studio_status"/>
                             </t>
                         </h4>
