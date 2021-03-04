@@ -75,7 +75,7 @@ class CustomerPortal(CustomerPortal):
 		order = searchbar_sortings[sortby]['order']
 
 		searchbar_filters = {
-			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'delivered', 'ready for delivery', 'confirmed','new'])]},
+			'all': {'label': _('all'), 'domain': [('x_studio_status', 'in', ['paid', 'billed', 'delivered', 'ready_for_delivery', 'confirmed','new'])]},
 			'new': {'label': _('new'), 'domain': [('x_studio_status', '=', 'new')]},
 			'paid': {'label': _('paid'), 'domain': [('x_studio_status', '=', ['paid'])]},
 			'billed': {'label': _('billed'), 'domain': [('x_studio_status', '=', 'billed')]},
