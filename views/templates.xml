@@ -220,7 +220,7 @@
 
         </xpath>
         <xpath expr="//input[@name='file']" position="replace">
-            <input name="file" type="file" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" class="form-control o_website_form_input"/>
+            <input name="file" type="file" t-if="(order.x_studio_status == 'ready for delivery' or order.x_studio_status == 'delivered')" class="form-control o_website_form_input"/>
         </xpath>
 
 
