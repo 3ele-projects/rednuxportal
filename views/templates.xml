@@ -225,7 +225,7 @@
 
 
         <xpath expr="//button[hasclass('o_upload_btn')]" position="replace">
-            <button type="submit" t-if="(order.x_studio_status == 'ready_for_delivery' or order.x_studio_status == 'delivered')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
+            <button type="submit" t-if="(order.x_studio_status == 'ready for delivery' or order.x_studio_status == 'delivered')" title="Upload Bill" class="form-control btn btn-secondary btn-block o_upload_btn fa fa-upload">Upload Bill</button>
         </xpath>
 
 
